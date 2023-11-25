@@ -47,8 +47,6 @@ const isApprovedSampleStep = computed(() => currentStatus.value.id === 'approvin
 const isHasMoreStepInGroup = computed(() => {
   const { id: statusId } = currentStatus.value;
   const statusDetails = statusData.value[statusId].details;
-
-  console.log(statusId);
   return statusDetails.length > 1;
 });
 const getCurrentSubStatus = computed(() => {
