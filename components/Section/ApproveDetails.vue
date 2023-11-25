@@ -1,20 +1,25 @@
 <script setup lang="ts">
 import { useVuelidate } from '@vuelidate/core';
-import { required, helpers } from '@vuelidate/validators';
+import { required, requiredIf, helpers } from '@vuelidate/validators';
 // PROPS
 interface Props {
   quotation: any;
 }
 
 // VARIABLE
-defineProps<Props>();
+const props = defineProps<Props>();
+const { quotation } = toRefs(props);
 const { $toast }: any = useNuxtApp();
 const form: any = inject('form');
+const produce = ref<any>(quotation.value.produce);
 
 // VALIDATOR
 const isTrue = (value: boolean): boolean => {
   return value;
 };
+const haveScreenWork = () => produce.value.screen_point.length > 0;
+const havePinWork = () => produce.value.pin_point.length > 0;
+const havePrintWork = () => produce.value.print_point.length > 0;
 
 const validatorRules = computed(() => ({
   sewCut: {
@@ -23,14 +28,24 @@ const validatorRules = computed(() => ({
   amountlist: {
     required: helpers.withMessage('กรุณาตรวจสอบทำเครื่องหมายยืนยันว่าข้อมูลไซซ์และจำนวนให้ครบทุกกลุ่ม ก่อนกดอนุมัติ', isTrue),
   },
+
+  screen: {
+    required: helpers.withMessage('กรุณาตรวจสอบข้อมูลงานสกรีน และทำเครื่องหมายยืนยันก่อนกดอนุมัติ', requiredIf(haveScreenWork)),
+  },
+  pin: {
+    required: helpers.withMessage('กรุณาตรวจสอบข้อมูลงานปัก และทำเครื่องหมายยืนยันก่อนกดอนุมัติ', requiredIf(havePinWork)),
+  },
+  print: {
+    required: helpers.withMessage('กรุณาตรวจสอบข้อมูลงานพิมพ์ และทำเครื่องหมายยืนยันก่อนกดอนุมัติ', requiredIf(havePrintWork)),
+  },
   delivery: {
     required: helpers.withMessage('กรุณาตรวจสอบข้อมูลการจัดส่ง และทำเครื่องหมายยืนยันก่อนกดอนุมัติ', isTrue),
   },
-  quotation: {
-    required: helpers.withMessage('กรุณาตรวจสอบทำเครื่องหมายยืนยันว่าใบสเปคนี้ถูกต้อง ก่อนกดอนุมัติ', isTrue),
-  },
   by: {
     required: helpers.withMessage('กรุณาลงชื่อผู้อนุมัติก่อนกดอนุมัติ', required),
+  },
+  quotation: {
+    required: helpers.withMessage('กรุณาตรวจสอบทำเครื่องหมายยืนยันว่าใบสเปคนี้ถูกต้อง ก่อนกดอนุมัติ', isTrue),
   },
 }));
 const validator = useVuelidate(validatorRules, form);
