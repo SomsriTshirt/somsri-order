@@ -11,7 +11,6 @@ const isLoading = ref<boolean>(true);
 const quotation = ref<any>({});
 const id = useRoute().query.id;
 const hasError = ref<boolean>(false);
-const { $toast }: any = useNuxtApp();
 const validateForm = ref<any>({
   sewCut: false,
   delivery: false,
@@ -20,7 +19,7 @@ const validateForm = ref<any>({
   by: '',
 });
 const sampleStatusList = [
-  { id: 'approving', name: 'อนุมัติใบสเปค', doing: 'รออนุมัติใบสเปค', icon: 'material-symbols:menu-book-outline-rounded' },
+  { id: 'producing', name: 'ผลิตตัวอย่าง', doing: 'กำลังผลิตตัวอย่าง', icon: 'material-symbols:precision-manufacturing-outline-rounded' },
   { id: 'producing', name: 'ผลิตตัวอย่าง', doing: 'กำลังผลิตตัวอย่าง', icon: 'material-symbols:precision-manufacturing-outline-rounded' },
   { id: 'approving_sample', name: 'อนุมัติตัวอย่าง', doing: 'รออนุมัติตัวอย่าง', icon: 'material-symbols:dry-cleaning-outline-sharp' },
 ];
@@ -181,6 +180,7 @@ onMounted(async () => {
             :status-list="sampleStatusList"
             :status-data="sampleStatusData"
             :step-data="quotation.step_data.sample"
+            :step-list="quotation.step_list.sample"
             @reload-quotation="reloadQuotation()"
           >
             <div class="mb-10">
@@ -189,7 +189,14 @@ onMounted(async () => {
           </Status>
 
           <!-- ORDER -->
-          <Status v-if="quotation.is_order" :quotation="quotation" :status-list="orderStatusList" :status-data="orderStatusData" :step-data="quotation.step_data.order">
+          <Status
+            v-if="quotation.is_order"
+            :quotation="quotation"
+            :status-list="orderStatusList"
+            :status-data="orderStatusData"
+            :step-list="quotation.step_list.order"
+            :step-data="quotation.step_data.order"
+          >
             <div class="mb-10">
               <p class="text-lg">อนุมัติใบสเปคเมื่อ {{ formatDate(quotation.step_data.sample.approved_spec.at) }} โดย {{ quotation.step_data.sample.approved_spec.by }}</p>
               <p v-if="quotation.produce.sample_type !== 'ไม่ต้อง'" class="text-lg">
