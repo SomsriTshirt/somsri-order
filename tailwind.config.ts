@@ -43,7 +43,6 @@ export default {
           },
         },
         dark: {
-          ...theme.dark,
           primary: "#d48a8f",
           secondary: "#f8c5a5",
           accent: "#1FB2A6",
