@@ -74,8 +74,8 @@ onMounted(() => {
 </script>
 <template>
   <div v-if="!isLoading">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
-      <div class="rounded-xl p-5 shadow" :class="{ 'bg-secondary': !isCompleted, 'bg-success': isCompleted }">
+    <div class="mb-5">
+      <div class="rounded-xl p-5 shadow mb-5" :class="{ 'bg-secondary': !isCompleted, 'bg-success': isCompleted }">
         <div class="flex">
           <div class="flex flex-col items-center">
             <div
