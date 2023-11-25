@@ -1,3 +1,4 @@
+import theme from "daisyui/src/theming/themes"
 import type { Config } from "tailwindcss"
 
 export default {
@@ -42,7 +43,7 @@ export default {
           },
         },
         dark: {
-          ...require("daisyui/src/theming/themes")["[data-theme=dark]"],
+          ...theme.dark,
           primary: "#d48a8f",
           secondary: "#f8c5a5",
           accent: "#1FB2A6",
