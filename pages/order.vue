@@ -6,10 +6,14 @@ import DeliveryDetails from '@/components/Section/DeliveryDetails.vue';
 import ApproveDetails from '@/components/Section/ApproveDetails.vue';
 import ApprovedSpecModal from '@/components/Component/ApprovedSpecModal.vue';
 
+const id = useRoute().query.id as string;
+useHead({
+  title: id,
+});
+
 // VARIABLE
 const isLoading = ref<boolean>(true);
 const quotation = ref<any>({});
-const id = useRoute().query.id;
 const hasError = ref<boolean>(false);
 const validateForm = ref<any>({
   sewCut: false,
@@ -45,11 +49,28 @@ const orderStatusData = ref<any>({
 provide('form', validateForm);
 
 // FUNCTION
+function validateQuotation(src: any): boolean {
+  // CHECK SAMPLE STEP
+  for (const step of src.step_list.sample) {
+    if (!step.tag) {
+      return false;
+    }
+  }
+
+  // CHECK ORDER STEP
+  for (const step of src.step_list.order) {
+    if (!step.tag) {
+      return false;
+    }
+  }
+
+  return true;
+}
 async function getQuotation() {
   try {
     const { data } = await useApiFetch(`/frontend/quotation/${id}?preload=produce,delivery`);
     // CHECK HAS DATA
-    if (!data.value) {
+    if (!data.value || !validateQuotation(data.value)) {
       hasError.value = true;
       return false;
     }
