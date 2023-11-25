@@ -30,7 +30,7 @@ watch(themeMode, (newVal) => {
     <div class="navbar container mx-auto px-6">
       <div class="flex-1">
         <NuxtLink to="/">
-          <img :src="logoSrc" class="w-32" />
+          <img :src="logoSrc" class="w-32" alt="สมศรีมีเสื้อ" />
         </NuxtLink>
       </div>
       <div class="flex-none">
