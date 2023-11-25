@@ -1,4 +1,3 @@
-import theme from "daisyui/src/theming/themes"
 import type { Config } from "tailwindcss"
 
 export default {
