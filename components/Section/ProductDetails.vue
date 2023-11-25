@@ -103,7 +103,7 @@ const havePrintWork = computed(() => produce.value.print_point.length > 0);
     <div v-if="haveScreenWork" class="mb-5">
       <h3 class="text-2xl text-white dark:text-black text-center font-medium bg-primary p-3 rounded-xl mb-3">ข้อมูลงานสกรีน</h3>
 
-      <div class="grid grid-cols-2 gap-5 mb-3">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-3">
         <ScreenWork v-for="(screen, i) in produce.screen_point" v-once :key="useGenVueKey(i)" :screen="screen" :index="i"></ScreenWork>
       </div>
       <div v-if="!isApproved" class="form-control">
@@ -119,7 +119,7 @@ const havePrintWork = computed(() => produce.value.print_point.length > 0);
     <div v-if="havePinWork" class="mb-5">
       <h3 class="text-2xl text-white dark:text-black text-center font-medium bg-primary p-3 rounded-xl mb-3">ข้อมูลงานปัก</h3>
 
-      <div class="grid grid-cols-2 gap-5 mb-3">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-3">
         <PinWork v-for="(pin, i) in produce.pin_point" v-once :key="useGenVueKey(i)" :pin="pin" :index="i"></PinWork>
       </div>
       <div v-if="!isApproved" class="form-control">
@@ -135,7 +135,7 @@ const havePrintWork = computed(() => produce.value.print_point.length > 0);
     <div v-if="havePrintWork" class="mb-5">
       <h3 class="text-2xl text-white dark:text-black text-center font-medium bg-primary p-3 rounded-xl mb-3">ข้อมูลงานพิมพ์</h3>
 
-      <div class="grid grid-cols-2 gap-5 mb-3">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-3">
         <PrintWork v-for="(print, i) in produce.print_point" v-once :key="useGenVueKey(i)" :print="print" :index="i"></PrintWork>
       </div>
       <div v-if="!isApproved" class="form-control">
