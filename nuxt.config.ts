@@ -1,7 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  ssr: false,
   app: {
     head: {
+      htmlAttrs: {
+        lang: 'th'
+      },
       link: [
         {
           rel: 'apple-touch-icon',
@@ -40,7 +44,7 @@ export default defineNuxtConfig({
           content: '#ffffff'
         }
       ]
-    },
+    }
   },
   build: {
     transpile: ['vue-sonner']

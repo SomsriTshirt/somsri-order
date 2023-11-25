@@ -1,4 +1,14 @@
 <script setup lang="ts">
+useSeoMeta({
+  ogTitle: 'หน้าหลัก - ระบบติดตามการผลิต',
+  ogUrl: 'https://order.somsritshirt.com/',
+  twitterTitle: 'หน้าหลัก - ระบบติดตามการผลิต',
+});
+
+useHead({
+  title: 'หน้าหลัก',
+});
+
 // VARIABLE
 const pending = ref<boolean>(false);
 const searchId = ref<string>('');

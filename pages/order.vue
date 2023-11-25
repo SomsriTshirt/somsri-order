@@ -7,8 +7,14 @@ import ApproveDetails from '@/components/Section/ApproveDetails.vue';
 import ApprovedSpecModal from '@/components/Component/ApprovedSpecModal.vue';
 
 const id = useRoute().query.id as string;
+useSeoMeta({
+  ogTitle: `${id} - ระบบติดตามการผลิต`,
+  ogUrl: `https://order.somsritshirt.com/order?id=${id}`,
+  twitterTitle: `${id} - ระบบติดตามการผลิต`,
+});
+
 useHead({
-  title: id,
+  title: id.toUpperCase(),
 });
 
 // VARIABLE
