@@ -74,7 +74,7 @@ function validateQuotation(src: any): boolean {
 }
 async function getQuotation() {
   try {
-    const { data } = await useApiFetch(`/frontend/quotation/${id}?preload=produce,delivery`);
+    const { data } = await useApiFetch(`/frontend/quotation/${id}`);
     // CHECK HAS DATA
     if (!data.value || !validateQuotation(data.value)) {
       hasError.value = true;
