@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Toaster } from 'vue-sonner';
 const toastOptions = ref({
   style: { fontFamily: 'IBM Plex Sans Thai', fontSize: '1rem' },
 });
