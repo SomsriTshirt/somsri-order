@@ -1,6 +1,6 @@
 import type { UseFetchOptions } from "nuxt/app"
 
-export async function useApiFetch<T>(path: string, options: UseFetchOptions<T> = {}) {
+export function useApiFetch<T>(path: string, options: UseFetchOptions<T> = {}) {
 	let headers: any = {}
 	const { $api }: any = useNuxtApp()
 	const token = useCookie("XSRF-TOKEN")
