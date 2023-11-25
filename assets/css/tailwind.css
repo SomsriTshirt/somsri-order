@@ -1,0 +1,32 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+html {
+    font-size: 14px;
+}
+
+/* SM */
+@media screen and (min-width: 640px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.swiper-slide {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+[data-theme=dark] {
+    --swiper-pagination-color: #d48a8f;
+    --swiper-navigation-color: #d48a8f;
+}
+
+[data-theme=light] {
+    --swiper-pagination-color: #a52241;
+    --swiper-navigation-color: #a52241;
+}

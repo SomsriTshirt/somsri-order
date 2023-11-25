@@ -1,5 +1,7 @@
 <template>
-  <div>
-    <NuxtPage />
-  </div>
+  <ColorScheme>
+    <div>
+      <NuxtPage />
+    </div>
+  </ColorScheme>
 </template>
