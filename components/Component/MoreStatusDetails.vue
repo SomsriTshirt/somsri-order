@@ -21,14 +21,16 @@ function isShowName(stepId: string): boolean {
     <div class="modal-box">
       <h3 class="font-bold text-xl mb-3">รายละเอียดการผลิต</h3>
       <ul class="steps steps-vertical">
-        <template v-for="(step, step_i) in stepList">
-          <li v-if="isFinishedStep(step.id)" :key="useGenVueKey(step_i)" class="step step-primary">
+        <template v-for="(step, step_i) in stepList" :key="useGenVueKey(step_i)">
+          <li v-if="step.enable" class="step" :class="{ 'step-primary': isFinishedStep(step.id) }">
             <div class="text-left">
               <p class="font-bold">{{ step.name }}</p>
-              <p>
-                เมื่อ: <span class="underline">{{ formatDate(stepData[step.id].at) }}</span> เวลา: <span class="underline">{{ formatTime(stepData[step.id].at) }} น.</span>
-              </p>
-              <p v-if="isShowName(step.id)">โดย {{ stepData[step.id].by }}</p>
+              <template v-if="isFinishedStep(step.id)">
+                <p>
+                  เมื่อ: <span class="underline">{{ formatDate(stepData[step.id].at) }}</span> เวลา: <span class="underline">{{ formatTime(stepData[step.id].at) }} น.</span>
+                </p>
+                <p v-if="isShowName(step.id)">โดย {{ stepData[step.id].by }}</p>
+              </template>
             </div>
           </li>
         </template>

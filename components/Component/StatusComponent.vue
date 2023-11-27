@@ -98,7 +98,7 @@ onMounted(() => {
               <button v-if="isApprovedSampleStep && !isCompleted" class="btn btn-sm btn-success mb-3 sm:mr-3 sm:mb-0" @click="openModal('approved-sample-modal')">
                 <IconCSS name="material-symbols:check-small-rounded" size="1.5rem"></IconCSS>อนุมัติตัวอย่าง
               </button>
-              <button class="btn btn-sm btn-primary" @click="openModal('more-status-details-modal')">ดูเพิ่มเติม</button>
+              <button class="btn btn-sm btn-primary" @click="openModal('more-status-details-modal')">ดูสถานะแบบละเอียด</button>
             </div>
           </div>
         </div>
