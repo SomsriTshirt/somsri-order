@@ -122,8 +122,10 @@ function getStatus(steps: any[], type: 'sample' | 'order') {
     }
 
     // PUSH DATA TO DETAILS
-    const detailsData = { ...step, ...stepData[stepId] };
-    data.details.push(detailsData);
+    if (step.enable) {
+      const detailsData = { ...step, ...stepData[stepId] };
+      data.details.push(detailsData);
+    }
   }
 
   // ASSIGN TO APPROVED
