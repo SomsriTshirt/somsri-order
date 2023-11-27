@@ -1,0 +1,27 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+    deploy_job:
+      runs-on: ubuntu-latest
+      name: 🌈 DEPLOY NUXT 3 TO OUR SERVER
+      steps:
+        # To use this repository's private action, you must check out the repository
+        - name: 🛒 CHECKOUT
+          uses: actions/checkout@v2
+
+        - name: 🛠️ BUILD OUR APP
+          run: npm install && npm run generate
+
+        - name: 🗿 DEPLOY BUILD TO SERVER
+          uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+          with:
+            username: ${{ secrets.USERNAME }}
+            server: '${{ secrets.IP }}'
+            password: ${{ secrets.PASSWORD }}
+            sftp_only: true
+            local_path: './.output/public/*'
+            remote_path: './domains/order.somsritshirt.com/public_html'
+            sftpArgs: '-o ConnectTimeout=5'
