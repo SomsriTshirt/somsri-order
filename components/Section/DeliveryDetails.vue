@@ -54,10 +54,10 @@ const isRecieveByMyself = computed(() => delivery.value.delivery_type === 'ล�
         <p>{{ delivery.delivery_type }}</p>
       </div>
     </div>
-    <div v-if="!isApproved" class="form-control">
+    <div v-if="!isApproved" class="form-control p-2 border dark:border-neutral-600 rounded-xl mt-5 bg-white dark:bg-base-100">
       <label class="label cursor-pointer justify-start">
         <input v-model="form.delivery" type="checkbox" class="checkbox checkbox-primary mr-3" />
-        <span class="label-text underline required">ฉันยืนยันว่าข้อมูลการจัดส่งถูกต้อง</span>
+        <span class="label-text underline required text-lg bg-yellow-400 bg-opacity-50">ฉันยืนยันว่าข้อมูลการจัดส่งถูกต้อง</span>
       </label>
     </div>
   </div>
