@@ -100,7 +100,9 @@ function groupStepByTag(type: 'sample' | 'order') {
     }
 
     // PUSH TO GROUP
-    groupStep[tag].push(step);
+    if (step.enable) {
+      groupStep[tag].push(step);
+    }
   }
 
   return groupStep;
