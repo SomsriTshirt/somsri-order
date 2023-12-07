@@ -4,6 +4,7 @@ import Status from '@/components/Component/StatusComponent.vue';
 import ProductDetails from '@/components/Section/ProductDetails.vue';
 import DeliveryDetails from '@/components/Section/DeliveryDetails.vue';
 import ApproveDetails from '@/components/Section/ApproveDetails.vue';
+import DueDetails from '@/components/Section/DueDetails.vue';
 import ApprovedSpecModal from '@/components/Component/ApprovedSpecModal.vue';
 
 const id = useRoute().query.id as string;
@@ -194,12 +195,12 @@ onMounted(async () => {
       <div v-if="!hasError">
         <h1 class="text-6xl text-primary mb-1 font-bold">{{ quotation.name }}</h1>
         <p class="text-3xl">{{ quotation.type }}</p>
-        <p class="mb-5 text-xl text-neutral-400">ID: {{ quotation.id }}</p>
+        <p class="mb-10 text-xl text-neutral-400">ID: {{ quotation.id }}</p>
         <template v-if="!isApprovedSpec">
+          <DueDetails :quotation="quotation" class="mb-10"></DueDetails>
           <ProductDetails :quotation="quotation" :is-approved="isApprovedSpec" class="mb-10"></ProductDetails>
           <DeliveryDetails :quotation="quotation" :is-approved="isApprovedSpec" class="mb-10"></DeliveryDetails>
           <ApproveDetails :quotation="quotation"></ApproveDetails>
-
           <!-- MODAL -->
           <ApprovedSpecModal :id="quotation.id" @reload-quotation="reloadQuotation()"></ApprovedSpecModal>
         </template>
@@ -235,6 +236,7 @@ onMounted(async () => {
               </p>
             </div>
           </Status>
+          <DueDetails :quotation="quotation" class="mb-10"></DueDetails>
           <DeliveryDetails :quotation="quotation" :is-approved="isApprovedSpec" class="mb-10"></DeliveryDetails>
           <ProductDetails :quotation="quotation" :is-approved="isApprovedSpec"></ProductDetails>
         </template>

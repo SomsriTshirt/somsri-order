@@ -111,10 +111,6 @@ onMounted(() => {
       </div>
     </div>
 
-    <p class="text-xl mb-5">
-      <span class="text-red-500">*</span>ทางบริษัทมีกำหนดการส่งมอบสินค้าภายในวันที่ <span class="underline">{{ formatDate(quotation.delivery_due) }}</span>
-    </p>
-
     <slot></slot>
 
     <!-- MODAL -->
