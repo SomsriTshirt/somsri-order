@@ -28,6 +28,7 @@ const validateForm = ref<any>({
   quotation: false,
   amountlist: false,
   by: '',
+  signatureUrl: '',
 });
 const sampleStatusList = [
   { id: 'producing', name: 'ผลิตตัวอย่าง', doing: 'กำลังผลิตตัวอย่าง', icon: 'material-symbols:precision-manufacturing-outline-rounded' },
