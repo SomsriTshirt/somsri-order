@@ -21,9 +21,10 @@ const produce = ref<any>(quotation.value.produce);
 
 const signaturePad = ref<any>(null);
 const canvas = ref<any>(null);
+const inputUploadFile = ref<any>(null);
 const context = ref<any>(null);
-const signatureInput = ref('');
 const imageUrl = ref<any>(null);
+const isDraw = ref<boolean>(false);
 
 // VALIDATOR
 const isTrue = (value: boolean): boolean => {
@@ -54,9 +55,9 @@ const validatorRules = computed(() => ({
   delivery: {
     required: helpers.withMessage('กรุณาตรวจสอบข้อมูลการจัดส่ง และทำเครื่องหมายยืนยันก่อนกดอนุมัติ', isTrue),
   },
-  // by: {
-  //   required: helpers.withMessage('กรุณาลงชื่อผู้อนุมัติก่อนกดอนุมัติ', required),
-  // },
+  by: {
+    required: helpers.withMessage('กรุณาลงชื่อผู้อนุมัติก่อนกดอนุมัติ', required),
+  },
   quotation: {
     required: helpers.withMessage('กรุณาตรวจสอบทำเครื่องหมายยืนยันว่าใบสเปคนี้ถูกต้อง ก่อนกดอนุมัติ', isTrue),
   },
@@ -65,7 +66,6 @@ const validator = useVuelidate(validatorRules, form);
 
 // FUNCTION
 async function openApproveModal() {
-  console.log(canvas.value.toDataURL());
   // VALIDATE DATA
   const validate = await validator.value.$validate();
   if (!validate) {
@@ -74,49 +74,33 @@ async function openApproveModal() {
     $toast.error(error.$message);
     return;
   }
+  if (!isDraw.value) {
+    $toast.error('กรุณากรอกลายเซ็นก่อนกดอนุมัติ');
+    return;
+  }
   form.value.signatureUrl = await uploadImage();
-  console.log(form.value.signatureUrl);
   openModal('approved-spec-modal');
 }
 
-// function resizeCanvas() {
-//   const ratio = Math.max(window.devicePixelRatio || 1, 1);
-
-//   canvas.value.width = canvas.value.offsetWidth * ratio;
-//   canvas.value.height = canvas.value.offsetHeight * ratio;
-//   canvas.value.getContext('2d').scale(ratio, ratio);
-//   signaturePad.value.clear();
-// }
-
-// function resizeCanvasListener() {
-//   window.addEventListener('resize', resizeCanvas);
-// }
-
-function createCanvas(elementId: string) {
-  canvas.value = document.getElementById(elementId);
+function createCanvas() {
+  canvas.value = document.getElementById('signature-pad');
   signaturePad.value = new SignaturePad(canvas.value);
-}
-function inputSignature() {
-  console.log(form.value.by);
-  signaturePad.value.clear();
-  context.value = canvas.value.getContext('2d');
-  context.value.font = '32px Dancing Script';
-  context.value.fillStyle = 'black';
-
-  context.value.fillText(signatureInput.value, 100, 75);
+  addEventCanvas();
 }
 
 function addImageSignature(event: any) {
+  signaturePad.value.off();
   const fileInput = event.target;
 
-  console.log(event.target.files.length);
   if (fileInput.files.length > 0) {
     const file = fileInput.files[0];
-
     const reader = new FileReader();
+    isDraw.value = true;
 
     reader.onload = (e) => {
       const imageDataUrl = e.target?.result;
+      signaturePad.value.clear();
+      addEventCanvas();
       drawImageSignature(imageDataUrl);
     };
     reader.readAsDataURL(file);
@@ -131,21 +115,32 @@ function drawImageSignature(imageDataUrl: any) {
   image.onload = () => {
     signaturePad.value.clear();
     context.value.drawImage(image, 0, 0, 150, 150);
-    const url = canvas.value.toDataURL();
-    console.log(url);
   };
 }
 
+function addEventCanvas() {
+  signaturePad.value.addEventListener(
+    'endStroke',
+    () => {
+      isDraw.value = true;
+    },
+    { once: true },
+  );
+}
 function clearCanvas() {
+  isDraw.value = false;
   signaturePad.value.clear();
-  signatureInput.value = '';
+  signaturePad.value.on();
+  addEventCanvas();
+  inputUploadFile.value = document.getElementById('input-uploadfile');
+  inputUploadFile.value.type = 'text';
+  inputUploadFile.value.type = 'file';
 }
 
 async function uploadImage() {
   // CREATE FORM
   imageUrl.value = canvas.value.toDataURL();
   const file = await convertImg(imageUrl.value, 'image/png');
-  console.log(file);
   const form = new FormData();
   form.append('image', file);
   try {
@@ -153,7 +148,6 @@ async function uploadImage() {
       method: 'POST',
       body: form,
     });
-    console.log(data.value.url);
     return data.value.url;
   } catch (err) {
     console.log(err);
@@ -163,22 +157,12 @@ async function uploadImage() {
 
 async function convertImg(url: string, type: string): Promise<File> {
   const date = new Date().getTime().toString();
-  let file: File;
-  let res = await fetch(url);
-  let blob = await res.blob();
-  return new File([blob], date, { type: type });
+  const res = await fetch(url);
+  const blob = await res.blob();
+  return new File([blob], date, { type });
 }
-// onUpdated(() => {
-//   // canvas.value = document.getElementById('signature-pad');
-//   signaturePad.value = new SignaturePad(canvas.value);
-// });
-onMounted(async () => {
-  createCanvas('signature-pad_1');
-});
-
-watch(form.value.by, (newval) => {
-  console.log(newval);
-  inputSignature();
+onMounted(() => {
+  createCanvas();
 });
 </script>
 <template>
@@ -188,40 +172,38 @@ watch(form.value.by, (newval) => {
         <span class="label-text required">ลงชื่อผู้อนุมัติใบสเปค</span>
       </label>
       <div class="grid grid-cols-12 gap-8">
-        <div class="col-span-10">
-          <div role="tablist" class="tabs tabs-lifted">
-            <!-- signature_pad_1 -->
-            <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="draw" checked @click="createCanvas('signature-pad_1')" />
-            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
-              <input v-model="form.by" class="input input-bordered input-sm mb-5 w-full" type="text" placeholder="ชื่อผู้อนุมัติใบสเปค" @change="inputSignature()" />
+        <div class="col-span-12 md:col-span-12 lg:col-span-9 xl:col-span-10">
+          <div class="grid grid-cols-12 mr-3">
+            <input v-model="form.by" class="input input-bordered input-sm mb-5 w-full dark:bg-neutral-800 col-span-12" type="text" placeholder="ชื่อผู้อนุมัติใบสเปค" />
+            <div class="col-span-12">
               <div class="grid grid-cols-12">
-                <div class="col-span-5">
-                  <canvas id="signature-pad_1" class="border" width="500"></canvas>
+                <div class="min-[1536px]:col-span-3 col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-4 max-[426px]:ml-5">
+                  <canvas id="signature-pad" class="border" width="auto"></canvas>
                 </div>
-                <div class="col-span-7 ml-8">
-                  <button class="btn text-sm" @click="clearCanvas()">clear</button>
-                </div>
-              </div>
-            </div>
-            <!-- signature_pad_3 -->
-            <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="load" @click="createCanvas('signature-pad_3')" />
-            <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
-              <input v-model="signatureInput" class="input input-bordered input-sm mb-5 w-full" type="text" placeholder="ชื่อผู้อนุมัติใบสเปค" />
-              <input type="file" class="file-input file-input-bordered file-input-sm w-full mb-4" @change="addImageSignature($event)" />
-              <div class="grid grid-cols-12">
-                <div class="col-span-5">
-                  <canvas id="signature-pad_3" class="border pointer-events-none" width="500"></canvas>
-                </div>
-                <div class="col-span-7 ml-8">
-                  <button class="btn text-sm" @click="clearCanvas()">clear</button>
+                <div class="min-[426px]:ml-5 col-span-12 min-[1536px]:col-span-2 md:col-span-3 lg:col-span-3 xl:col-span-2 mt-3">
+                  <div class="mb-2">
+                    <button class="btn text-sm bg-warning hover:bg-yellow-500 dark:text-base-100 w-full" @click="clearCanvas()">
+                      <IconCSS name="material-symbols:cleaning-services-outline" size="1.25rem" class="mr-1" />
+                      ล้างลายเซ็น
+                    </button>
+                  </div>
+                  <div class="relative inline-block cursor-pointer w-full">
+                    <button class="btn text-sm bg-success dark:text-base-100 w-full">
+                      <IconCSS name="material-symbols:upload-rounded" size="1.25rem" class="mr-1" />
+                      โหลดลายเซ็น
+                    </button>
+                    <input id="input-uploadfile" type="file" class="absolute inset-0 opacity-0 cursor-pointer w-full" @change="addImageSignature($event)" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <!-- <canvas ref="signaturePadCanvas" class="w-full" height="40" style="border: 1px solid #000"></canvas> -->
         </div>
-        <!-- <input id="input-approved-name" v-model="form.by" class="input input-bordered col-span-10" type="text" placeholder="ชื่อผู้อนุมัติใบสเปค" /> -->
-        <button class="btn btn-success text-lg col-span-2" @click="openApproveModal()"><IconCSS name="material-symbols:check-small-rounded" size="2rem"></IconCSS>อนุมัติใบสเปค</button>
+        <div class="col-span-12 md:col-span-4 lg:col-span-3 xl:col-span-2 mr-3">
+          <button class="btn btn-success text-lg xl:text-sm sm:text-sm w-full" @click="openApproveModal()">
+            <IconCSS name="material-symbols:check-small-rounded" size="2rem"></IconCSS>อนุมัติใบสเปค
+          </button>
+        </div>
       </div>
     </div>
     <div class="form-control">
