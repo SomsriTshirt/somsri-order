@@ -4,69 +4,69 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: {
-        lang: 'th'
+        lang: 'th',
       },
       link: [
         {
           rel: 'apple-touch-icon',
           sizes: '180x180',
-          href: '/favicon/apple-touch-icon.png'
+          href: '/favicon/apple-touch-icon.png',
         },
         {
           rel: 'icon',
           type: 'image/png',
           sizes: '32x32',
-          href: '/favicon/favicon-32x32.png'
+          href: '/favicon/favicon-32x32.png',
         },
         {
           rel: 'icon',
           type: 'image/png',
           sizes: '16x16',
-          href: '/favicon/favicon-16x16.png'
+          href: '/favicon/favicon-16x16.png',
         },
         {
           rel: 'manifest',
-          href: '/favicon/site.webmanifest'
+          href: '/favicon/site.webmanifest',
         },
         {
           rel: 'mask-icon',
           href: '/favicon/safari-pinned-tab.svg',
-          color: '#a52241'
-        }
+          color: '#a52241',
+        },
       ],
       meta: [
         {
           name: 'msapplication-TileColor',
-          content: '#a52241'
+          content: '#a52241',
         },
         {
           name: 'theme-color',
-          content: '#ffffff'
-        }
-      ]
-    }
+          content: '#ffffff',
+        },
+      ],
+    },
   },
   build: {
-    transpile: ['vue-sonner']
+    transpile: ['vue-sonner'],
   },
   devtools: {
-    enabled: true // or false to disable
+    enabled: true, // or false to disable
   },
   modules: ['@nuxtjs/eslint-module', '@nuxtjs/tailwindcss', '@nuxtjs/google-fonts', 'nuxt-icon', '@nuxtjs/color-mode'],
   colorMode: {
-    classSuffix: ''
+    classSuffix: '',
   },
   googleFonts: {
     families: {
-      "IBM+Plex+Sans+Thai": [300, 400, 500, 700],
+      'IBM+Plex+Sans+Thai': [300, 400, 500, 700],
     },
-    display: "swap",
+    display: 'swap',
     preload: true,
   },
   runtimeConfig: {
     public: {
-      api: process.env.API_URL || "https://api.somsritshirt.com",
-      appName: process.env.APP_NAME || "ติดตามการผลิตสมศรีมีเสื้อ",
+      api: process.env.API_URL || 'https://api.somsritshirt.com',
+      appName: process.env.APP_NAME || 'ติดตามการผลิตสมศรีมีเสื้อ',
     },
   },
-})
+});
