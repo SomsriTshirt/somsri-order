@@ -23,7 +23,7 @@ const signaturePad = ref<any>(null);
 const canvas = ref<any>(null);
 const inputUploadFile = ref<any>(null);
 const context = ref<any>(null);
-const imageUrl = ref<any>(null);
+const imageUrl = ref<string>('');
 const isDraw = ref<boolean>(false);
 
 // VALIDATOR
@@ -88,11 +88,11 @@ function createCanvas() {
   addEventCanvas();
 }
 
-function addImageSignature(event: any) {
+function addImageSignature(event: Event) {
   signaturePad.value.off();
-  const fileInput = event.target;
+  const fileInput = event.target as HTMLInputElement;
 
-  if (fileInput.files.length > 0) {
+  if (fileInput && fileInput.files && fileInput.files.length > 0) {
     const file = fileInput.files[0];
     const reader = new FileReader();
     isDraw.value = true;
@@ -133,10 +133,8 @@ function clearCanvas() {
   signaturePad.value.on();
   addEventCanvas();
   inputUploadFile.value = document.getElementById('input-uploadfile');
-  inputUploadFile.value.type = 'text';
-  inputUploadFile.value.type = 'file';
+  inputUploadFile.value = '';
 }
-
 async function uploadImage() {
   // CREATE FORM
   imageUrl.value = canvas.value.toDataURL();
@@ -161,6 +159,14 @@ async function convertImg(url: string, type: string): Promise<File> {
   const blob = await res.blob();
   return new File([blob], date, { type });
 }
+
+function openFileInput(id: string) {
+  const fileInput = document.getElementById(id);
+  if (fileInput) {
+    fileInput.click();
+  }
+}
+
 onMounted(() => {
   createCanvas();
 });
@@ -177,10 +183,10 @@ onMounted(() => {
             <input v-model="form.by" class="input input-bordered input-sm mb-5 w-full dark:bg-neutral-800 col-span-12" type="text" placeholder="ชื่อผู้อนุมัติใบสเปค" />
             <div class="col-span-12">
               <div class="grid grid-cols-12">
-                <div class="min-[1536px]:col-span-3 col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-4 max-[426px]:ml-5">
+                <div class="col-span-12 2xl:col-span-3 lg:col-span-5 xl:col-span-4 md:col-span-6 ml-3">
                   <canvas id="signature-pad" class="border" width="auto"></canvas>
                 </div>
-                <div class="min-[426px]:ml-5 col-span-12 min-[1536px]:col-span-2 md:col-span-3 lg:col-span-3 xl:col-span-2 mt-3">
+                <div class="col-span-12 2xl:col-span-2 xl:col-span-3 lg:col-span-4 md:col-span-3 lg:ml-10 xl:ml-1 2xl:ml-8 mt-3">
                   <div class="mb-2">
                     <button class="btn text-sm bg-warning hover:bg-yellow-500 dark:text-base-100 w-full" @click="clearCanvas()">
                       <IconCSS name="material-symbols:cleaning-services-outline" size="1.25rem" class="mr-1" />
@@ -188,11 +194,11 @@ onMounted(() => {
                     </button>
                   </div>
                   <div class="relative inline-block cursor-pointer w-full">
-                    <button class="btn text-sm bg-success dark:text-base-100 w-full">
+                    <button class="btn text-sm bg-success dark:text-base-100 w-full" @click="openFileInput('input-uploadfile')">
                       <IconCSS name="material-symbols:upload-rounded" size="1.25rem" class="mr-1" />
                       โหลดลายเซ็น
                     </button>
-                    <input id="input-uploadfile" type="file" class="absolute inset-0 opacity-0 cursor-pointer w-full" @change="addImageSignature($event)" />
+                    <input id="input-uploadfile" type="file" class="hidden" @change="addImageSignature($event)" />
                   </div>
                 </div>
               </div>
