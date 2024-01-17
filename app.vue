@@ -56,8 +56,16 @@ useHead({
   ],
 });
 
+const { $hotjar }: any = useNuxtApp();
+
 const toastOptions = ref({
   style: { fontFamily: 'IBM Plex Sans Thai', fontSize: '1rem' },
+});
+
+// ON MOUNTED
+onMounted(() => {
+  // INIT HOTJAR
+  $hotjar();
 });
 </script>
 <template>
