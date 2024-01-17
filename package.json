@@ -27,6 +27,7 @@
     "tslint-config-prettier": "^1.18.0"
   },
   "dependencies": {
+    "@hotjar/browser": "^1.0.9",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@sentry/vue": "^7.81.1",
     "@vuelidate/core": "^2.0.3",
