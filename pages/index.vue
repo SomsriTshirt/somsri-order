@@ -39,8 +39,6 @@ async function findQuotation() {
   }
   pending.value = false;
 }
-
-console.log(asjdas);
 </script>
 <template>
   <NuxtLayout>
