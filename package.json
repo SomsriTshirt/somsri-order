@@ -34,6 +34,7 @@
     "@vuelidate/validators": "^2.0.4",
     "lodash": "^4.17.21",
     "luxon": "^3.4.4",
+    "nuxt-bugsnag": "^7.2.3",
     "prettier": "^3.1.0",
     "swiper": "^11.0.4",
     "uuid": "^9.0.1",
