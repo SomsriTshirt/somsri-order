@@ -190,70 +190,72 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <NuxtLayout>
-    <div v-if="!isLoading">
-      <div v-if="!hasError">
-        <h1 class="text-6xl text-primary mb-1 font-bold">{{ quotation.name }}</h1>
-        <p class="text-3xl">{{ quotation.type }}</p>
-        <p class="mb-10 text-xl text-neutral-400">ID: {{ quotation.id }}</p>
-        <template v-if="!isApprovedSpec">
-          <DueDetails :quotation="quotation" class="mb-10"></DueDetails>
-          <ProductDetails :quotation="quotation" :is-approved="isApprovedSpec" class="mb-10"></ProductDetails>
-          <DeliveryDetails :quotation="quotation" :is-approved="isApprovedSpec" class="mb-10"></DeliveryDetails>
-          <ApproveDetails :quotation="quotation"></ApproveDetails>
-          <!-- MODAL -->
-          <ApprovedSpecModal :id="quotation.id" @reload-quotation="reloadQuotation()"></ApprovedSpecModal>
-        </template>
-        <template v-else>
-          <!-- SAMPLE -->
-          <Status
-            v-if="!quotation.is_order"
-            :quotation="quotation"
-            :status-list="sampleStatusList"
-            :status-data="sampleStatusData"
-            :step-data="quotation.step_data.sample"
-            :step-list="quotation.step_list.sample"
-            @reload-quotation="reloadQuotation()"
-          >
-            <div class="mb-10">
-              <p class="text-lg">อนุมัติใบสเปคเมื่อ {{ formatDate(quotation.step_data.sample.approved_spec.at) }} โดย {{ quotation.step_data.sample.approved_spec.by }}</p>
-            </div>
-          </Status>
+  <div>
+    <NuxtLayout>
+      <div v-if="!isLoading">
+        <div v-if="!hasError">
+          <h1 class="text-6xl text-primary mb-1 font-bold">{{ quotation.name }}</h1>
+          <p class="text-3xl">{{ quotation.type }}</p>
+          <p class="mb-10 text-xl text-neutral-400">ID: {{ quotation.id }}</p>
+          <template v-if="!isApprovedSpec">
+            <DueDetails :quotation="quotation" class="mb-10"></DueDetails>
+            <ProductDetails :quotation="quotation" :is-approved="isApprovedSpec" class="mb-10"></ProductDetails>
+            <DeliveryDetails :quotation="quotation" :is-approved="isApprovedSpec" class="mb-10"></DeliveryDetails>
+            <ApproveDetails :quotation="quotation"></ApproveDetails>
+            <!-- MODAL -->
+            <ApprovedSpecModal :id="quotation.id" @reload-quotation="reloadQuotation()"></ApprovedSpecModal>
+          </template>
+          <template v-else>
+            <!-- SAMPLE -->
+            <Status
+              v-if="!quotation.is_order"
+              :quotation="quotation"
+              :status-list="sampleStatusList"
+              :status-data="sampleStatusData"
+              :step-data="quotation.step_data.sample"
+              :step-list="quotation.step_list.sample"
+              @reload-quotation="reloadQuotation()"
+            >
+              <div class="mb-10">
+                <p class="text-lg">อนุมัติใบสเปคเมื่อ {{ formatDate(quotation.step_data.sample.approved_spec.at) }} โดย {{ quotation.step_data.sample.approved_spec.by }}</p>
+              </div>
+            </Status>
 
-          <!-- ORDER -->
-          <Status
-            v-if="quotation.is_order"
-            :quotation="quotation"
-            :status-list="orderStatusList"
-            :status-data="orderStatusData"
-            :step-list="quotation.step_list.order"
-            :step-data="quotation.step_data.order"
-          >
-            <div class="mb-10">
-              <p class="text-lg">อนุมัติใบสเปคเมื่อ {{ formatDate(quotation.step_data.sample.approved_spec.at) }} โดย {{ quotation.step_data.sample.approved_spec.by }}</p>
-              <p v-if="quotation.produce.sample_type !== 'ไม่ต้อง'" class="text-lg">
-                อนุมัติตัวอย่างเมื่อ {{ formatDate(quotation.step_data.sample.approved_sample.at) }} โดย {{ quotation.step_data.sample.approved_sample.by }}
-              </p>
-            </div>
-          </Status>
-          <DueDetails :quotation="quotation" class="mb-10"></DueDetails>
-          <DeliveryDetails :quotation="quotation" :is-approved="isApprovedSpec" class="mb-10"></DeliveryDetails>
-          <ProductDetails :quotation="quotation" :is-approved="isApprovedSpec"></ProductDetails>
-        </template>
-      </div>
-      <div v-else>
-        <div class="flex justify-center mb-5">
-          <IconCSS name="material-symbols:chat-error-outline-rounded" size="6rem" class="text-error"></IconCSS>
+            <!-- ORDER -->
+            <Status
+              v-if="quotation.is_order"
+              :quotation="quotation"
+              :status-list="orderStatusList"
+              :status-data="orderStatusData"
+              :step-list="quotation.step_list.order"
+              :step-data="quotation.step_data.order"
+            >
+              <div class="mb-10">
+                <p class="text-lg">อนุมัติใบสเปคเมื่อ {{ formatDate(quotation.step_data.sample.approved_spec.at) }} โดย {{ quotation.step_data.sample.approved_spec.by }}</p>
+                <p v-if="quotation.produce.sample_type !== 'ไม่ต้อง'" class="text-lg">
+                  อนุมัติตัวอย่างเมื่อ {{ formatDate(quotation.step_data.sample.approved_sample.at) }} โดย {{ quotation.step_data.sample.approved_sample.by }}
+                </p>
+              </div>
+            </Status>
+            <DueDetails :quotation="quotation" class="mb-10"></DueDetails>
+            <DeliveryDetails :quotation="quotation" :is-approved="isApprovedSpec" class="mb-10"></DeliveryDetails>
+            <ProductDetails :quotation="quotation" :is-approved="isApprovedSpec"></ProductDetails>
+          </template>
         </div>
+        <div v-else>
+          <div class="flex justify-center mb-5">
+            <IconCSS name="material-symbols:chat-error-outline-rounded" size="6rem" class="text-error"></IconCSS>
+          </div>
 
-        <p class="text-center text-4xl font-bold mb-2 text-warning">เกิดปัญหาระหว่างดึงข้อมูลโปรเจกต์</p>
-        <p class="text-center text-xl">โปรดลองอีกครั้งในภายหลัง</p>
+          <p class="text-center text-4xl font-bold mb-2 text-warning">เกิดปัญหาระหว่างดึงข้อมูลโปรเจกต์</p>
+          <p class="text-center text-xl">โปรดลองอีกครั้งในภายหลัง</p>
+        </div>
       </div>
-    </div>
-    <div v-else class="h-screen w-screen fixed top-0 left-0 bg-black opacity-50 flex justify-center items-center">
-      <span class="loading loading-spinner loading-lg text-primary"></span>
-    </div>
-  </NuxtLayout>
+      <div v-else class="h-screen w-screen fixed top-0 left-0 bg-black opacity-50 flex justify-center items-center">
+        <span class="loading loading-spinner loading-lg text-primary"></span>
+      </div>
+    </NuxtLayout>
+  </div>
 </template>
 <style>
 .required::after {
