@@ -37,6 +37,7 @@
     "nuxt-bugsnag": "^7.2.3",
     "prettier": "^3.1.0",
     "swiper": "^11.0.4",
+    "typescript": "^5.4.3",
     "uuid": "^9.0.1",
     "vue-sonner": "^1.0.2"
   }

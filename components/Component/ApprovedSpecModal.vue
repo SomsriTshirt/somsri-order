@@ -1,26 +1,29 @@
+<!-- ยืนยันใบสเปค -->
 <script setup lang="ts">
 interface Props {
   id: string;
 }
 
-const props = defineProps<Props>();
+const props = defineProps<Props>();//props ใช้เก็บข้อมูล Props(id) ที่ส่งมายัง component
 const { id } = toRefs(props);
 const form: any = inject('form');
 
 // EMIT
-const emit = defineEmits(['reload-quotation']);
+const emit = defineEmits(['reload-quotation']);// emit สามารถส่ง reload-quotation ได้
 
 // VARIABLE
-const pending = ref<boolean>(false);
-const { $toast }: any = useNuxtApp();
+const pending = ref<boolean>(false);//pending(รอดำเนินการ) มีค่าเริ่มต้นเป็น false
+const { $toast }: any = useNuxtApp();//แสดงการแจ้งเตือน
 
-// FUNCTION
+// FUNCTION ยืนยันอนุมัติใบสเปค
 async function approvedSpec() {
   pending.value = true;
+
   try {
-    const { data }: any = await useApiFetch(`/frontend/quotation/${id.value}/approved-spec`, {
+    // 
+    const { data }: any = await useApiFetch(`/frontend/quotation/${id.value}/approved-spec`, {//${id.value} ดึงค่า id ที่เป็น ref มาแสดง
       method: 'PATCH',
-      body: form.value,
+      body: form.value,//ส่งข้อมูลที่เก็บไว้ใน form ไปยัง API
     });
     if (data.value.status) {
       $toast.success('อนุมัติใบสเปคเรียบร้อยแล้ว', {
@@ -30,9 +33,14 @@ async function approvedSpec() {
       // REFRESH QUOTATION
       emit('reload-quotation');
     }
-  } catch (err) {}
-  pending.value = false;
-}
+  } catch (err) {
+    pending.value = false;
+  }
+  
+} 
+
+// Fetch สร้าง request ยิงไปที่ API
+// ข้อมูลที่ดึงได้จะเป็น JSON ซึ่งใน js ไม่่สามารถใช้ได้ ต้องแปลงให้เป็น js object ก่อน
 </script>
 <template>
   <dialog id="approved-spec-modal" class="modal">
