@@ -5,12 +5,12 @@
       <h2>ติดตามงาน</h2>
       <div class="form-control">
         <label for="projectId">ไอดีโปรเจกต์</label>
-        <input type="text" name="" id="projectId" placeholder="Enter your project ID" />
+        <input id="projectId" type="text" name="" placeholder="Enter your project ID" />
         <small>error message</small>
       </div>
       <div class="form-control">
         <label for="uniqueId">เลขผู้เสียภาษี</label>
-        <input type="text" id="uniqueId" placeholder="Enter your tax ID" />
+        <input id="uniqueId" type="text" placeholder="Enter your tax ID" />
         <small> error message</small>
       </div>
 
@@ -42,7 +42,7 @@ function showsuccess(input) {
 }
 
 function checkProject() {
-  //งานเก่า
+  // งานเก่า
   // const
 }
 
