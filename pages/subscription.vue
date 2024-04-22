@@ -34,7 +34,7 @@
 
 <script lang="ts" setup>
 import { useVuelidate } from '@vuelidate/core';
-import { minLength, required , helpers } from '@vuelidate/validators';
+import { minLength, required, helpers } from '@vuelidate/validators';
 
 const form = ref<Record<string, any>>({
   projectId: [{ id: '', vueKey: genKey() }],
@@ -44,17 +44,17 @@ const projectId = ref();
 const uniqueId = ref();
 
 const rules = computed(() => ({
-  projectId: { 
-    $each:helpers.forEach({
-      id:{
-        required
-      }
-  })} ,
-  taxId : {
+  projectId: {
+    $each: helpers.forEach({
+      id: {
+        required,
+      },
+    }),
+  },
+  taxId: {
     required,
-    minLength: minLength(10)
-  }
-
+    minLength: minLength(10),
+  },
 }));
 
 const v$ = useVuelidate(rules, form);
