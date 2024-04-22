@@ -1,5 +1,6 @@
 <!-- หน้าฟอร์ม -->
 <template>
+
   <div class="p-7 bg-white shadow-lg h-screen flex justify-center items-center">
     <form id="form" class="w-full" @submit.prevent="submitForm">
       <h1 class="text-center">ติดตามงาน</h1>
@@ -30,6 +31,7 @@
         <button class="btn btn-primary w-full text-lg" type="submit" @click="submitForm">ยืนยัน</button>
       </div>
       <p>{{ lineUser }}</p>
+
     </form>
   </div>
 </template>
@@ -96,6 +98,7 @@ function submitForm() {
   console.log(form.value);
 }
 
+
 async function initLiff() {
   // 2.liff.ready
   await liff.init({ liffId: '2004487535-jXq601Jv' });
@@ -104,6 +107,7 @@ async function initLiff() {
       getUserProfile();
     }
   });
+
 }
 
 async function getUserProfile() {
