@@ -1,6 +1,5 @@
 <!-- หน้าฟอร์ม -->
 <template>
-
   <div class="p-7 bg-white shadow-lg h-screen flex justify-center items-center">
     <form id="form" class="w-full" @submit.prevent="submitForm">
       <h1 class="text-center">ติดตามงาน</h1>
@@ -30,13 +29,15 @@
 
         <button class="btn btn-primary w-full text-lg" type="submit" @click="submitForm">ยืนยัน</button>
       </div>
-      <p>{{ lineUser }}</p>
-
+      <div>
+        <div><b>userId: </b>{{ lineUser }}</div>
+      </div>
     </form>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { ref, onMounted } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { minLength, required, helpers } from '@vuelidate/validators';
 import liff from '@line/liff';
@@ -47,6 +48,7 @@ const form = ref<Record<string, any>>({
 }); //
 const projectId = ref();
 const uniqueId = ref();
+const userEmail = ref('');
 const lineUser = ref();
 // const email = ref();
 // const userId = ref();
@@ -98,20 +100,24 @@ function submitForm() {
   console.log(form.value);
 }
 
-
 async function initLiff() {
   // 2.liff.ready
   await liff.init({ liffId: '2004487535-jXq601Jv' });
   liff.ready.then(() => {
+    // เช็คว่าเปิดแอพในมือถือจริงหรือเปล่า isInClient
     if (liff.isInClient()) {
       getUserProfile();
     }
   });
-
 }
 
 async function getUserProfile() {
-  lineUser.value = await liff.getProfile();
+  const userProfile = await liff.getProfile();
+  lineUser.value.userId = userProfile.userId;
+  // lineUser.value.pictureUrl = userProfile.pictureUrl;
+  // lineUser.value.displayName = userProfile.displayName;
+  // lineUser.value.statusMessage = userProfile.statusMessage;
+  // userEmail.value = liff.getDecodedIDToken().email;
 }
 // email.innerHTML = '<b>email : </b>' + liff.getDecodedIDToken().email;
 // const test = () => console.log(id.value);
