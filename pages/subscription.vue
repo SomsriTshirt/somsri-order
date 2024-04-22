@@ -1,7 +1,7 @@
 <!-- หน้าฟอร์ม -->
 <template>
   <div class="p-7 bg-white shadow-lg h-screen flex justify-center items-center">
-    <form id="form" class="w-full" @submit.prevent="test()">
+    <form id="form" class="w-full" @submit.prevent="submitForm">
       <h1 class="text-center">ติดตามงาน</h1>
       <div class="space-y-5">
         <label class="form-control w-full">
@@ -9,13 +9,14 @@
             <span class="label-text text-md">ไอดีโปรเจกต์</span>
           </div>
 
-          <div class="flex gap-3" v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey">
+          <!-- ใช้ v-for วนลูป ใน array ของ form.projectId -->
+          <div v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey" class="flex gap-3">
             <input v-model="tracking.id" type="text" placeholder="Enter your project ID" class="input input-bordered w-full join-item" />
             <p>{{ tracking }}</p>
             <button class="btn join-item btn-error" type="button" @click="removeProjectId(trackingI)">ลบ</button>
           </div>
           <!-- tracking เก็บค่าของ element , trackingI เก็บค่า Index -->
-          <button type="button" @click="addProjectId(trackingI)" class="btn">เพิ่ม</button>
+          <button type="button" class="btn" @click="addProjectId(trackingI)">เพิ่ม</button>
           <!-- <button type="button" @click="form.id.push('')" class="btn">เพิ่ม</button> -->
         </label>
 
@@ -26,8 +27,9 @@
           <input v-model="form.taxId" type="text" placeholder="Enter your project tax ID" class="input input-bordered w-full" />
         </label>
 
-        <button class="btn btn-primary w-full text-lg" type="submit">ยืนยัน</button>
+        <button class="btn btn-primary w-full text-lg" type="submit" @click="submitForm">ยืนยัน</button>
       </div>
+      <p>{{ lineUser }}</p>
     </form>
   </div>
 </template>
@@ -35,16 +37,24 @@
 <script lang="ts" setup>
 import { useVuelidate } from '@vuelidate/core';
 import { minLength, required, helpers } from '@vuelidate/validators';
+import liff from '@line/liff';
 
 const form = ref<Record<string, any>>({
   projectId: [{ id: '', vueKey: genKey() }],
-  taxId: '123',
+  taxId: '',
 }); //
 const projectId = ref();
 const uniqueId = ref();
+const lineUser = ref();
+// const email = ref();
+// const userId = ref();
+// const pictureUrl = ref();
+// const displayName = ref();
 
+//
 const rules = computed(() => ({
   projectId: {
+    // forEach คือการลูป array เพื่อเข้าถึงแต่ละ element ใน array
     $each: helpers.forEach({
       id: {
         required,
@@ -62,17 +72,19 @@ const v$ = useVuelidate(rules, form);
 // const { data: data } = await useFetch('https://dummyjson.com/products?limit=10');
 // console.log(data);
 
-//สร้าง key เพื่อเพิ่มการรักษาความปลอดภัย
+// ฟังก์ชั่นสร้าง key เพื่อเพิ่มการรักษาความปลอดภัย
 function genKey() {
   return Math.random() * 1000;
 }
 
+// ฟังก์ชันเพิ่ม ค่า id และ ค่า vuekey ให้ในตัวแปร form
 function addProjectId() {
   console.log(form.value.id);
   // console.log(count);
   form.value.projectId.push({ id: '', vueKey: genKey() });
 }
 
+// ฟังก์ชัน remove ลบเฉพาะเจาะจง index
 function removeProjectId(index: number) {
   console.log(index);
   console.log(form.value.id);
@@ -84,6 +96,20 @@ function submitForm() {
   console.log(form.value);
 }
 
+async function initLiff() {
+  // 2.liff.ready
+  await liff.init({ liffId: '2004487535-jXq601Jv' });
+  liff.ready.then(() => {
+    if (liff.isInClient()) {
+      getUserProfile();
+    }
+  });
+}
+
+async function getUserProfile() {
+  lineUser.value = await liff.getProfile();
+}
+// email.innerHTML = '<b>email : </b>' + liff.getDecodedIDToken().email;
 // const test = () => console.log(id.value);
 // form.addEventListener('submit',function(e)){
 //     e.preventDefault();
@@ -111,6 +137,10 @@ function submitForm() {
 //         }
 //     });
 // }
+
+onMounted(() => {
+  initLiff();
+});
 </script>
 
 <style scoped>
