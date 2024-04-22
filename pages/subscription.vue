@@ -100,20 +100,37 @@ function submitForm() {
   console.log(form.value);
 }
 
-async function initLiff() {
+// async function initLiff() {
+//   // 2.liff.ready
+//   await liff.init({ liffId: '2004693630-nXmo8dVN' });
+//   liff.ready.then(() => {
+//     // เช็คว่าเปิดแอพในมือถือจริงหรือเปล่า isInClient
+//     if (liff.isInClient()) {
+//       getUserProfile();
+//     }
+//       getUserProfile();
+//   });
+// }
+function initLiff() {
   // 2.liff.ready
-  await liff.init({ liffId: '2004487535-jXq601Jv' });
-  liff.ready.then(() => {
-    // เช็คว่าเปิดแอพในมือถือจริงหรือเปล่า isInClient
-    if (liff.isInClient()) {
+  liff
+    .init({ liffId: '2004487535-RwJYB2jX' })
+    .then(() => {
       getUserProfile();
-    }
-  });
+    })
+    .catch((err) => {
+      // Error happens during initialization
+      console.log(err.code, err.message);
+    });
 }
-
 async function getUserProfile() {
-  const userProfile = await liff.getProfile();
-  lineUser.value.userId = userProfile.userId;
+  if (liff.isLoggedIn()) {
+    lineUser.value = await liff.getProfile();
+  } 
+  else {
+    liff.login()
+  }
+
   // lineUser.value.pictureUrl = userProfile.pictureUrl;
   // lineUser.value.displayName = userProfile.displayName;
   // lineUser.value.statusMessage = userProfile.statusMessage;
