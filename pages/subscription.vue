@@ -27,7 +27,7 @@
           <input v-model="form.taxId" type="text" placeholder="Enter your project tax ID" class="input input-bordered w-full" />
         </label>
 
-        <button class="btn btn-primary w-full text-lg" type="submit" @click="submitForm">ยืนยัน</button>
+        <button class="btn btn-primary w-full text-lg" type="submit">ยืนยัน</button>
       </div>
       <div>
         <div><b>userId: </b>{{ lineUser }}</div>
@@ -46,10 +46,28 @@ const form = ref<Record<string, any>>({
   projectId: [{ id: '', vueKey: genKey() }],
   taxId: '',
 }); //
-const projectId = ref();
-const uniqueId = ref();
-const userEmail = ref('');
+// const projectId = ref();
+// const uniqueId = ref();
+// const userEmail = ref('');
 const lineUser = ref();
+const { $toast } = useNuxtApp();
+
+// เพิ่มเอง
+// const express = required('express')
+// const app = express()
+// app.use(express.json())
+
+// const PORT ='8888'
+
+// const LINE_BOT_API = 'https://api.line.me/v2/bot'
+
+// app.post('/send-message', async(req,res)=>{
+
+// })
+
+// app.listen(PORT,(req,res)=>{
+//   console.log(`run at http://localhost: ${PORT}`)
+// })
 // const email = ref();
 // const userId = ref();
 // const pictureUrl = ref();
@@ -96,25 +114,43 @@ function removeProjectId(index: number) {
   form.value.projectId.splice(index, 1);
 }
 
-function submitForm() {
-  console.log(form.value);
+// ฟังก์ชัน Validate form
+
+async function submitForm() {
+  try {
+    // ลองเช็คว่า error มั้ย
+    const { data, error } = await useApiFetch('/v1/line-datas', {
+      method: 'POST',
+      // ... แตกข้อมูล key จากตัวแปรนั้นๆออกมา form.value มี 2 ตัวคือ projectId , taxId
+      body: {
+        ...form.value,
+        lineUserId: lineUser.value.userId,
+        //
+        projectId: form.value.projectId.map((project) => project.id),
+      },
+    });
+
+    // throw ใช้กับตัว exception คล้ายกับ return
+    if (error.value) throw error.value;
+    if (!data.value) throw new Error('No response submit form!');
+    return true;
+  } catch (error) {
+    $toast.error('เกิดข้อผิดพลาดระหว่างกดติดตาม');
+    return false;
+  }
+
+  // console.log(form.value);
+  // useApiFetch() คำสั่งสำหรับยิง api ใช้ได้ทุก method //ส่วนค่าไไป 2 parameters (end point, {}ตั้งค่า method)
 }
 
-// async function initLiff() {
-//   // 2.liff.ready
-//   await liff.init({ liffId: '2004693630-nXmo8dVN' });
-//   liff.ready.then(() => {
-//     // เช็คว่าเปิดแอพในมือถือจริงหรือเปล่า isInClient
-//     if (liff.isInClient()) {
-//       getUserProfile();
-//     }
-//       getUserProfile();
-//   });
-// }
 function initLiff() {
   // 2.liff.ready
   liff
+    // Real Project
     .init({ liffId: '2004487535-RwJYB2jX' })
+
+    //  Local Host
+    // .init({ liffId: '2004487535-qxvEo2ge' })
     .then(() => {
       getUserProfile();
     })
@@ -126,9 +162,8 @@ function initLiff() {
 async function getUserProfile() {
   if (liff.isLoggedIn()) {
     lineUser.value = await liff.getProfile();
-  } 
-  else {
-    liff.login()
+  } else {
+    liff.login();
   }
 
   // lineUser.value.pictureUrl = userProfile.pictureUrl;
