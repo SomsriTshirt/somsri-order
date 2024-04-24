@@ -120,8 +120,6 @@ function removeProjectId(index: number) {
 
 async function submitForm() {
   try {
-   
-
     // ลองเช็คว่า error มั้ย
     const { data, error } = await useApiFetch('/v1/line-datas', {
       method: 'POST',
@@ -154,8 +152,8 @@ async function initLiff() {
       // Real Project
       .init({ liffId: '2004487535-RwJYB2jX' });
 
-      //  Local Host
-      // .init({ liffId: '2004487535-qxvEo2ge' });
+    //  Local Host
+    // .init({ liffId: '2004487535-qxvEo2ge' });
 
     if (liff.isLoggedIn()) {
       lineUser.value = await getUserProfile();
