@@ -160,11 +160,11 @@ function initLiff() {
     });
 }
 async function getUserProfile() {
-  if (liff.isLoggedIn()) {
-    lineUser.value = await liff.getProfile();
-  } else {
+  if (!liff.isLoggedIn()) {
     liff.login();
+    return false;
   }
+  lineUser.value = await liff.getProfile();
 
   // lineUser.value.pictureUrl = userProfile.pictureUrl;
   // lineUser.value.displayName = userProfile.displayName;
