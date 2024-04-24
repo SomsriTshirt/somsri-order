@@ -154,11 +154,11 @@ function initLiff() {
     //  Local Host
     // .init({ liffId: '2004487535-qxvEo2ge' })
     .then(async () => {
-      if (liff.isLoggedIn() && liff.isInClient()) {
-        lineUser.value = await liff.getProfile();
+      if (liff.isLoggedIn()) {
+        lineUser.value = await getUserProfile();
       } else {
-        await liff.login();
-        getUserProfile();
+        liff.login();
+        lineUser.value = await getUserProfile();
       }
     })
     .catch((err) => {
@@ -166,25 +166,15 @@ function initLiff() {
       console.log(err.code, err.message);
     });
 }
+
 async function getUserProfile() {
-  if (liff.isLoggedIn()) {
-    lineUser.value = await liff.getProfile();
-  } else {
-    liff.login();
-  }
+  return await liff.getProfile();
 }
 
 const logOut = async () => {
   await liff.logout();
   window.location.reload();
 };
-
-// async function getUserProfile() {
-// if (liff.isLoggedIn()) {
-//   lineUser.value = await liff.getProfile();
-// } else {
-//   liff.login();
-// }
 
 // lineUser.value.pictureUrl = userProfile.pictureUrl;
 // lineUser.value.displayName = userProfile.displayName;
