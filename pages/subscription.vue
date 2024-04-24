@@ -1,40 +1,42 @@
 <!-- หน้าฟอร์ม -->
 <template>
-  <div class="p-7 bg-white shadow-lg h-screen flex justify-center items-center">
-    <form id="form" class="w-full" @submit.prevent="submitForm">
-      <h1 class="text-center">ติดตามงาน</h1>
-      <div class="space-y-5">
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text text-md">ไอดีโปรเจกต์</span>
-          </div>
+  <div v-if="!pending">
+    <div class="p-7 bg-white shadow-lg h-screen flex justify-center items-center">
+      <form id="form" class="w-full" @submit.prevent="submitForm">
+        <h1 class="text-center">ติดตามงาน</h1>
+        <div class="space-y-5">
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text text-md">ไอดีโปรเจกต์</span>
+            </div>
 
-          <!-- ใช้ v-for วนลูป ใน array ของ form.projectId -->
-          <div v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey" class="flex gap-3">
-            <input v-model="tracking.id" type="text" placeholder="Enter your project ID" class="input input-bordered w-full join-item" />
-            <p>{{ tracking }}</p>
-            <button class="btn join-item btn-error" type="button" @click="removeProjectId(trackingI)">ลบ</button>
-          </div>
-          <!-- tracking เก็บค่าของ element , trackingI เก็บค่า Index -->
-          <button type="button" class="btn" @click="addProjectId(trackingI)">เพิ่ม</button>
-          <!-- <button type="button" @click="form.id.push('')" class="btn">เพิ่ม</button> -->
-        </label>
+            <!-- ใช้ v-for วนลูป ใน array ของ form.projectId -->
+            <div v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey" class="flex gap-3">
+              <input v-model="tracking.id" type="text" placeholder="Enter your project ID" class="input input-bordered w-full join-item" />
+              <p>{{ tracking }}</p>
+              <button class="btn join-item btn-error" type="button" @click="removeProjectId(trackingI)">ลบ</button>
+            </div>
+            <!-- tracking เก็บค่าของ element , trackingI เก็บค่า Index -->
+            <button type="button" class="btn" @click="addProjectId(trackingI)">เพิ่ม</button>
+            <!-- <button type="button" @click="form.id.push('')" class="btn">เพิ่ม</button> -->
+          </label>
 
-        <label class="form-control w-full">
-          <div class="label">
-            <span class="label-text text-md">เลขผู้เสียภาษี</span>
-          </div>
-          <input v-model="form.taxId" type="text" placeholder="Enter your project tax ID" class="input input-bordered w-full" />
-        </label>
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text text-md">เลขผู้เสียภาษี</span>
+            </div>
+            <input v-model="form.taxId" type="text" placeholder="Enter your project tax ID" class="input input-bordered w-full" />
+          </label>
 
-        <button class="btn btn-primary w-full text-lg" type="submit">ยืนยัน</button>
-      </div>
-      <div>
-        <div><b>userId: </b>{{ lineUser }}</div>
-        <br />
-        <button @click="logOut()">Logout</button>
-      </div>
-    </form>
+          <button class="btn btn-primary w-full text-lg" type="submit">ยืนยัน</button>
+        </div>
+        <div>
+          <div><b>userId: </b>{{ lineUser }}</div>
+          <br />
+          <button @click="logOut()">Logout</button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -48,9 +50,7 @@ const form = ref<Record<string, any>>({
   projectId: [{ id: '', vueKey: genKey() }],
   taxId: '',
 }); //
-// const projectId = ref();
-// const uniqueId = ref();
-// const userEmail = ref('');
+const pending = ref<boolean>(true);
 const lineUser = ref();
 const { $toast } = useNuxtApp();
 
@@ -145,26 +145,25 @@ async function submitForm() {
   // useApiFetch() คำสั่งสำหรับยิง api ใช้ได้ทุก method //ส่วนค่าไไป 2 parameters (end point, {}ตั้งค่า method)
 }
 
-function initLiff() {
-  // 2.liff.ready
-  liff
-    // Real Project
-    .init({ liffId: '2004487535-RwJYB2jX' })
+async function initLiff() {
+  try {
+    // 2.liff.ready
+    await liff
+      // Real Project
+      .init({ liffId: '2004487535-RwJYB2jX' });
 
     //  Local Host
     // .init({ liffId: '2004487535-qxvEo2ge' })
-    .then(async () => {
-      if (liff.isLoggedIn()) {
-        lineUser.value = await getUserProfile();
-      } else {
-        liff.login();
-        lineUser.value = await getUserProfile();
-      }
-    })
-    .catch((err) => {
-      // Error happens during initialization
-      console.log(err.code, err.message);
-    });
+
+    if (liff.isLoggedIn()) {
+      lineUser.value = await getUserProfile();
+    } else {
+      liff.login();
+      lineUser.value = await getUserProfile();
+    }
+  } catch (err) {
+    console.log(err.code, err.message);
+  }
 }
 
 async function getUserProfile() {
@@ -210,8 +209,9 @@ const logOut = async () => {
 //     });
 // }
 
-onMounted(() => {
-  initLiff();
+onMounted(async () => {
+  await initLiff();
+  pending.value = false;
 });
 </script>
 
