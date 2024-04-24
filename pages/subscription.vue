@@ -155,6 +155,7 @@ async function initLiff() {
     //  Local Host
     // .init({ liffId: '2004487535-qxvEo2ge' })
 
+
     if (liff.isLoggedIn()) {
       lineUser.value = await getUserProfile();
     } else {
@@ -164,6 +165,7 @@ async function initLiff() {
   } catch (err) {
     console.log(err.code, err.message);
   }
+
 }
 
 async function getUserProfile() {
