@@ -33,7 +33,9 @@
         <div>
           <div><b>userId: </b>{{ lineUser }}</div>
           <br />
+
           <button @click="logIn()">Login</button>
+
         </div>
       </form>
     </div>
