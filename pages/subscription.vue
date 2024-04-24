@@ -31,6 +31,8 @@
       </div>
       <div>
         <div><b>userId: </b>{{ lineUser }}</div>
+        <br />
+        <button @click="logOut()">Logout</button>
       </div>
     </form>
   </div>
@@ -156,7 +158,7 @@ function initLiff() {
         lineUser.value = await liff.getProfile();
       } else {
         await liff.login();
-        getUserProfile()
+        getUserProfile();
       }
     })
     .catch((err) => {
@@ -170,19 +172,25 @@ async function getUserProfile() {
   } else {
     liff.login();
   }
-
-  // async function getUserProfile() {
-  // if (liff.isLoggedIn()) {
-  //   lineUser.value = await liff.getProfile();
-  // } else {
-  //   liff.login();
-  // }
-
-  // lineUser.value.pictureUrl = userProfile.pictureUrl;
-  // lineUser.value.displayName = userProfile.displayName;
-  // lineUser.value.statusMessage = userProfile.statusMessage;
-  // userEmail.value = liff.getDecodedIDToken().email;
 }
+
+const logOut = async () => {
+  await liff.logout();
+  window.location.reload();
+};
+
+// async function getUserProfile() {
+// if (liff.isLoggedIn()) {
+//   lineUser.value = await liff.getProfile();
+// } else {
+//   liff.login();
+// }
+
+// lineUser.value.pictureUrl = userProfile.pictureUrl;
+// lineUser.value.displayName = userProfile.displayName;
+// lineUser.value.statusMessage = userProfile.statusMessage;
+// userEmail.value = liff.getDecodedIDToken().email;
+
 // email.innerHTML = '<b>email : </b>' + liff.getDecodedIDToken().email;
 // const test = () => console.log(id.value);
 // form.addEventListener('submit',function(e)){
