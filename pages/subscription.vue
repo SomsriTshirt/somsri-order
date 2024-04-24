@@ -33,7 +33,7 @@
         <div>
           <div><b>userId: </b>{{ lineUser }}</div>
           <br />
-          <button @click="logOut()">Logout</button>
+          <button @click="logIn()">Logout</button>
         </div>
       </form>
     </div>
@@ -170,9 +170,9 @@ async function getUserProfile() {
   return await liff.getProfile();
 }
 
-const logOut = async () => {
-  await liff.logout();
-  window.location.reload();
+const logIn = async () => {
+  await liff.login();
+  // window.location.reload();
 };
 
 // lineUser.value.pictureUrl = userProfile.pictureUrl;
