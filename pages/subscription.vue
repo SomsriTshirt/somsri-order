@@ -154,7 +154,7 @@ function initLiff() {
     //  Local Host
     // .init({ liffId: '2004487535-qxvEo2ge' })
     .then(async () => {
-      if (liff.isLoggedIn()) {
+      if (liff.isLoggedIn() && liff.isInClient()) {
         lineUser.value = await liff.getProfile();
       } else {
         await liff.login();
