@@ -34,7 +34,7 @@
           <div><b>userId: </b>{{ lineUser }}</div>
           <br />
 
-          <button @click="logIn()">Logout</button>
+          <button @click="logIn()">Login</button>
 
         </div>
       </form>
@@ -155,8 +155,7 @@ async function initLiff() {
       .init({ liffId: '2004487535-RwJYB2jX' });
 
     //  Local Host
-    // .init({ liffId: '2004487535-qxvEo2ge' })
-
+    // .init({ liffId: '2004487535-qxvEo2ge' });
 
     if (liff.isLoggedIn()) {
       lineUser.value = await getUserProfile();
@@ -167,7 +166,6 @@ async function initLiff() {
   } catch (err) {
     console.log(err.code, err.message);
   }
-
 }
 
 async function getUserProfile() {
