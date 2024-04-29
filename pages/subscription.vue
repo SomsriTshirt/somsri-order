@@ -13,7 +13,7 @@
             <!-- ใช้ v-for วนลูป ใน array ของ form.projectId -->
             <div v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey" class="flex gap-3">
               <input v-model="tracking.id" type="text" placeholder="Enter your project ID" class="input input-bordered w-full join-item" />
-              <p>{{ tracking }}</p>
+              <!-- <p>{{ tracking }}</p> -->
               <button class="btn join-item btn-error" type="button" @click="removeProjectId(trackingI)">ลบ</button>
             </div>
             <!-- tracking เก็บค่าของ element , trackingI เก็บค่า Index -->
@@ -23,19 +23,15 @@
 
           <label class="form-control w-full">
             <div class="label">
-              <span class="label-text text-md">เลขผู้เสียภาษี</span>
+              <span class="label-text text-md">เบอร์โทรศัพท์</span>
             </div>
-            <input v-model="form.taxId" type="text" placeholder="Enter your project tax ID" class="input input-bordered w-full" />
+            <input v-model="form.phoneNumber" type="text" placeholder="Enter your project tax ID" class="input input-bordered w-full" />
           </label>
 
           <button class="btn btn-primary w-full text-lg" type="submit">ยืนยัน</button>
         </div>
         <div>
-          <div><b>userId: </b>{{ lineUser }}</div>
-          <br />
-
-          <button @click="logIn()">Login</button>
-
+          <!-- <div><b>userId: </b>{{ lineUser }}</div> -->
         </div>
       </form>
     </div>
@@ -50,7 +46,7 @@ import liff from '@line/liff';
 
 const form = ref<Record<string, any>>({
   projectId: [{ id: '', vueKey: genKey() }],
-  taxId: '',
+  phoneNumber: '',
 }); //
 const pending = ref<boolean>(true);
 const lineUser = ref();
@@ -87,7 +83,7 @@ const rules = computed(() => ({
       },
     }),
   },
-  taxId: {
+  phoneNumber: {
     required,
     minLength: minLength(10),
   },
@@ -125,7 +121,7 @@ async function submitForm() {
     // ลองเช็คว่า error มั้ย
     const { data, error } = await useApiFetch('/v1/line-datas', {
       method: 'POST',
-      // ... แตกข้อมูล key จากตัวแปรนั้นๆออกมา form.value มี 2 ตัวคือ projectId , taxId
+      // ... แตกข้อมูล key จากตัวแปรนั้นๆออกมา form.value มี 2 ตัวคือ projectId , phoneNumber
       body: {
         ...form.value,
         lineUserId: lineUser.value.userId,
@@ -144,7 +140,8 @@ async function submitForm() {
   }
 
   // console.log(form.value);
-  // useApiFetch() คำสั่งสำหรับยิง api ใช้ได้ทุก method //ส่วนค่าไไป 2 parameters (end point, {}ตั้งค่า method)
+  // useApiFetch() คำสั่งสำหรับยิง api ใช้ได้ทุก method
+  // ส่งค่าไไป 2 parameters (end point, {}ตั้งค่า method)
 }
 
 async function initLiff() {
@@ -172,10 +169,10 @@ async function getUserProfile() {
   return await liff.getProfile();
 }
 
-const logIn = async () => {
-  await liff.login();
-  // window.location.reload();
-};
+// const logIn = async () => {
+//   await liff.login();
+//   // window.location.reload();
+// };
 
 // lineUser.value.pictureUrl = userProfile.pictureUrl;
 // lineUser.value.displayName = userProfile.displayName;
