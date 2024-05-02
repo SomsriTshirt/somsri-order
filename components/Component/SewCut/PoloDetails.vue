@@ -1,25 +1,25 @@
 <script setup lang="ts">
 // PROPS
 interface Props {
-  quotation: any;
+  specSheet: any;
 }
 const props = defineProps<Props>();
-const { quotation } = toRefs(props);
-const produce = ref<any>(quotation.value.produce);
+const { specSheet } = toRefs(props);
+const produce = ref<any>(specSheet.value.details);
 
 // COMPUTED
 const havePocket = computed(() => produce.value.pocket !== 'ไม่มี');
 const haveButton = computed(() => produce.value.button > 0);
 const placketSize = computed(() => {
-  if (produce.value.placket_width && produce.value.placket_long) {
-    return `${produce.value.placket_width} x ${produce.value.placket_long}`;
+  if (produce.value.placketWidth && produce.value.placketLong) {
+    return `${produce.value.placketWidth} x ${produce.value.placketLong}`;
   } else {
     return '-';
   }
 });
 const pocketSize = computed(() => {
-  if (produce.value.pocket_width && produce.value.pocket_long) {
-    return `${produce.value.pocket_width} ${produce.value.pocket_length_suffix} x ${produce.value.pocket_long} ${produce.value.pocket_length_suffix}`;
+  if (produce.value.pocketWidth && produce.value.pocketLong) {
+    return `${produce.value.pocketWidth} ${produce.value.pocketLengthSuffix} x ${produce.value.pocketLong} ${produce.value.pocketLengthSuffix}`;
   } else {
     return '-';
   }
@@ -53,7 +53,7 @@ const buttonAmount = computed(() => {
       </tr>
       <tr>
         <td class="font-medium border dark:border-neutral-700">ลักษณะการเย็บเพิ่มเติม</td>
-        <td class="capitalize border dark:border-neutral-700">{{ produce.more_sew_style }}</td>
+        <td class="capitalize border dark:border-neutral-700">{{ produce.sewStyleNote }}</td>
       </tr>
       <tr>
         <td class="font-medium border dark:border-neutral-700">ลักษณะสาป</td>
@@ -61,7 +61,7 @@ const buttonAmount = computed(() => {
       </tr>
       <tr>
         <td class="font-medium border dark:border-neutral-700">สีสาป</td>
-        <td class="capitalize border dark:border-neutral-700">{{ produce.placket_color }}</td>
+        <td class="capitalize border dark:border-neutral-700">{{ produce.placketColor }}</td>
       </tr>
       <tr>
         <td class="font-medium border dark:border-neutral-700">ความกว้าง x ความยาวของสาป</td>
@@ -81,7 +81,7 @@ const buttonAmount = computed(() => {
       </tr>
       <tr v-if="haveButton">
         <td class="font-medium border dark:border-neutral-700">สีกระดุม</td>
-        <td class="capitalize border dark:border-neutral-700">{{ produce.button_color }}</td>
+        <td class="capitalize border dark:border-neutral-700">{{ produce.buttonColor }}</td>
       </tr>
     </tbody>
   </table>

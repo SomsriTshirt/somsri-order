@@ -1,10 +1,10 @@
 <script setup lang="ts">
 // PROPS
 interface Props {
-    quotationId: string;
+    specSheetId: string;
 }
 const props = defineProps<Props>();
-const { quotationId } = toRefs(props);
+const { specSheetId } = toRefs(props);
 
 // EMIT
 const emit = defineEmits(['verified']);
@@ -49,28 +49,45 @@ async function verify() {
     }
 
     try {
-        const { data, error } = await useApiFetch<{ verified: boolean }>(`/frontend/quotation/${quotationId.value}/verify`, {
+        const pin = ref<string[]>(['']);
+        const { data }: any = await useApiFetch(`/v1/spec-sheets/public/${specSheetId.value}`,{
+            query: {
+                include: 'project,project.customer',
+                    },
+        });
+        pin.value = data.value.project?.customer?.phoneNumber.slice(-4);
+
+        if(pins.value.join('') == pin.value){
+            emit('verified');
+            return true;
+        }else{
+            isPending.value = false;
+            errorMsg.value = 'เลข 4 ตัวสุดท้ายของเบอร์โทรศัพท์ไม่ถูกต้อง โปรดลองอีกครั้ง';
+            return false;
+        }
+        
+        /* const { data, error } = await useApiFetch<{ verified: boolean }>(`/frontend/quotation/${quotationId.value}/verify`, {
             method: 'POST',
             body: {
                 verifyPin: pins.value.join(''),
             },
-        });
+        }); */
 
         // ERROR HANDLING
-        if (error.value && error.value.statusCode === 401) {
+       /*  if (error.value && error.value.statusCode === 401) {
             isPending.value = false;
             errorMsg.value = 'เลข 4 ตัวสุดท้ายของเบอร์โทรศัพท์ไม่ถูกต้อง โปรดลองอีกครั้ง';
             return false;
         } else if (error.value) throw error.value;
-        else if (!data.value) throw new Error('NO VERIFY DATA @VERIFICATION');
+        else if (!data.value) throw new Error('NO VERIFY DATA @VERIFICATION'); */
 
         // SEND SIGNAL TO PARENT FOR LOADING CONTENT
-        if (data.value.verified) {
+       /*  if (data.value) {
             emit('verified');
             return true;
         } else {
             return false;
-        }
+        } */
     } catch (err) {
         useBugsnag().notify(JSON.stringify(err));
         errorMsg.value = 'เกิดปัญหาระหว่างยืนยันตัวตน';

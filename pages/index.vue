@@ -16,7 +16,7 @@ const error = ref<string | null>('');
 const { $toast }: any = useNuxtApp();
 
 // FUNCTION
-async function findQuotation() {
+async function findSpecsheet() {
   pending.value = true;
   // VALIDATE
   if (!searchId.value) {
@@ -26,8 +26,15 @@ async function findQuotation() {
   }
 
   try {
-    const { data }: any = await useApiFetch(`/frontend/quotation/${searchId.value}/is-valid`);
-    if (!data.value.isValid) {
+    const { data }: any = await useApiFetch(`/v1/spec-sheets/public/${searchId.value}`, {
+      query: {
+        include: 'project,project.customer',
+      },
+    });
+
+    /* console.log(data.value.project?.customer?.phoneNumber.slice(-4)); */
+    /* const { data }: any = await useApiFetch(`/frontend/quotation/${searchId.value}/is-valid`); */
+    if (!data.value) {
       error.value = 'ไม่พบโปรเจกต์ กรุณาตรวจสอบเลขที่ใบเสนอราคาอีกครั้ง';
       pending.value = false;
       return;
@@ -44,11 +51,11 @@ async function findQuotation() {
   <div>
     <NuxtLayout>
       <h1 class="text-center text-primary text-5xl font-bold mb-3">ระบบติดตามการผลิตของสมศรีมีเสื้อ</h1>
-      <p class="text-center text-xl text-neutral-400 mb-10">กรอกเลขที่ใบเสนอราคาเพื่อทำการติดตามการผลิตได้เลยได้เลย🤩</p>
-      <form @submit.prevent="findQuotation()">
+      <p class="text-center text-xl text-neutral-400 mb-10">กรอกเลขที่ใบสเปคราคาเพื่อทำการติดตามการผลิตได้เลยได้เลย🤩</p>
+      <form @submit.prevent="findSpecsheet()">
         <div class="grid grid-cols-12 gap-5">
           <div class="col-span-12 sm:col-span-9 lg:col-span-10">
-            <input v-model="searchId" type="text" class="input input-bordered w-full" :class="{ 'border-error': error }" placeholder="เลขที่ใบเสนอราคา" :disabled="pending" />
+            <input v-model="searchId" type="text" class="input input-bordered w-full" :class="{ 'border-error': error }" placeholder="เลขที่ใบสเปค" :disabled="pending" />
             <p v-if="error" class="text-error mt-2">{{ error }}</p>
           </div>
 

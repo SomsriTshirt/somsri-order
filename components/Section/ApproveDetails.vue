@@ -3,23 +3,22 @@ import { useVuelidate } from '@vuelidate/core';
 import { required, requiredIf, helpers } from '@vuelidate/validators';
 // PROPS
 interface Props {
-  quotation: any;
+  specSheet: any;
 }
 
 // VARIABLE
 const props = defineProps<Props>();
-const { quotation } = toRefs(props);
+const { specSheet } = toRefs(props);
 const { $toast }: any = useNuxtApp();
 const form: any = inject('form');
-const produce = ref<any>(quotation.value.produce);
 
 // VALIDATOR
 const isTrue = (value: boolean): boolean => {
   return value;
 };
-const haveScreenWork = () => produce.value.screen_point.length > 0;
-const havePinWork = () => produce.value.pin_point.length > 0;
-const havePrintWork = () => produce.value.print_point.length > 0;
+const haveScreenWork = () => specSheet.value.screenPoints.length > 0;
+const havePinWork = () => specSheet.value.pinPoints.length > 0;
+const havePrintWork = () => specSheet.value.printPoints.length > 0;
 
 const validatorRules = computed(() => ({
   sewCut: {
