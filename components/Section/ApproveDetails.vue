@@ -43,7 +43,7 @@ const validatorRules = computed(() => ({
   by: {
     required: helpers.withMessage('กรุณาลงชื่อผู้อนุมัติก่อนกดอนุมัติ', required),
   },
-  quotation: {
+  specSheet: {
     required: helpers.withMessage('กรุณาตรวจสอบทำเครื่องหมายยืนยันว่าใบสเปคนี้ถูกต้อง ก่อนกดอนุมัติ', isTrue),
   },
 }));
@@ -76,7 +76,7 @@ async function openApproveModal() {
     </div>
     <div class="form-control">
       <label class="label cursor-pointer justify-start">
-        <input v-model="form.quotation" type="checkbox" class="checkbox checkbox-primary mr-3" />
+        <input v-model="form.specSheet" type="checkbox" class="checkbox checkbox-primary mr-3" />
         <span class="label-text underline required">ฉันได้ทำการตรวจสอบมั่นใจแล้วว่าใบสเปคนี้ถูกต้อง</span>
       </label>
     </div>

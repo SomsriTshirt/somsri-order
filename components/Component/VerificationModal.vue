@@ -57,7 +57,7 @@ async function verify() {
         });
         pin.value = data.value.project?.customer?.phoneNumber.slice(-4);
 
-        if(pins.value.join('') == pin.value){
+        if(pins.value.join('') === pin.value){
             emit('verified');
             return true;
         }else{
@@ -139,7 +139,6 @@ function nextInput(index: number) {
             </div>
             <p class="text-error text-center text-sm mb-10">{{ errorMsg }}</p>
             <div class="modal-action flex justify-center">
-                <!-- if there is a button in form, it will close the modal -->
                 <button type="button" :disabled="isPending" class="btn btn-primary text-lg" @click="verify()">ยืนยัน</button>
             </div>
         </div>

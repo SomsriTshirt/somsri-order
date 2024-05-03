@@ -32,8 +32,6 @@ async function findSpecsheet() {
       },
     });
 
-    /* console.log(data.value.project?.customer?.phoneNumber.slice(-4)); */
-    /* const { data }: any = await useApiFetch(`/frontend/quotation/${searchId.value}/is-valid`); */
     if (!data.value) {
       error.value = 'ไม่พบโปรเจกต์ กรุณาตรวจสอบเลขที่ใบเสนอราคาอีกครั้ง';
       pending.value = false;

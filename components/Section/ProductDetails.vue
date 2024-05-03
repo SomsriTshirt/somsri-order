@@ -53,24 +53,6 @@ const havePrintWork = computed(() => specSheet.value.printPoints.length > 0);
       <h3 class="text-2xl text-white dark:text-black text-center font-medium bg-primary rounded-t-xl p-3">ข้อมูลไซซ์และจำนวน</h3>
       <table class="table-fixed border border-collapse border-neutral-300 dark:border-neutral-700 w-full bg-white dark:bg-base-100 shadow mb-3">
         <tbody>
-          <!-- SAMPLE -->
-          <!--  <tr v-for="(group, group_i) in produce.amountlist.sample" v-once :key="group.name + group_i">
-            <td class="w-1/2 p-3 border dark:border-neutral-700">
-              <swiper-container class="bg-neutral-800 rounded-2xl w-full" navigation="true" pagination="true" loop="true" centered-slides="true">
-                <swiper-slide v-for="(img, img_i) in group.img" :key="useGenVueKey(img_i)" class="flex justify-center rounded-2xl">
-                  <img class="rounded-2xl object-contain" :src="$api(img.url)" />
-                </swiper-slide>
-              </swiper-container>
-            </td>
-            <td class="w-1/2 p-3 border dark:border-neutral-700">
-              <p class="text-xl text-red-500 font-medium">งานตัวอย่าง</p>
-              <p class="text-lg font-medium">{{ group.name }}</p>
-              <ul>
-                <li v-for="(size, size_i) in group.info" :key="useGenVueKey(size_i)">{{ size.name }} - {{ size.amount }} ตัว</li>
-              </ul>
-            </td>
-          </tr> -->
-
           <!--  ORDER -->
           <tr v-for="(group, group_i) in specSheet.amount" v-once :key="group.name + group_i">
             <td class="w-1/2 p-3 border dark:border-neutral-700">
