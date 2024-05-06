@@ -11,13 +11,13 @@
             </div>
 
             <!-- ใช้ v-for วนลูป ใน array ของ form.projectId -->
-            <div v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey" class="flex gap-3">
-              <input v-model="tracking.id" type="text" placeholder="Enter your project ID" class="input input-bordered w-full join-item" />
+            <div v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey" class="flex gap-3 input-field">
+              <input v-model="tracking.id" type="text" placeholder="กรุณากรอกไอดีโปรเจกต์" class="input input-bordered w-full join-item" />
               <!-- <p>{{ tracking }}</p> -->
               <button class="btn join-item btn-error" type="button" @click="removeProjectId(trackingI)">ลบ</button>
             </div>
             <!-- tracking เก็บค่าของ element , trackingI เก็บค่า Index -->
-            <button type="button" class="btn" @click="addProjectId(trackingI)">เพิ่ม</button>
+            <button type="button" class="btn-addproject text-white" @click="addProjectId(trackingI)">เพิ่ม</button>
             <!-- <button type="button" @click="form.id.push('')" class="btn">เพิ่ม</button> -->
           </label>
 
@@ -25,7 +25,7 @@
             <div class="label">
               <span class="label-text text-md">เบอร์โทรศัพท์</span>
             </div>
-            <input v-model="form.phoneNumber" type="text" placeholder="Enter your project tax ID" class="input input-bordered w-full" />
+            <input v-model="form.phoneNumber" type="text" placeholder="กรุณากรอกเบอร์โทรศัพท์" class="input input-bordered w-full" />
           </label>
 
           <button class="btn btn-primary w-full text-lg" type="submit">ยืนยัน</button>
@@ -133,6 +133,11 @@ async function submitForm() {
     // throw ใช้กับตัว exception คล้ายกับ return
     if (error.value) throw error.value;
     if (!data.value) throw new Error('No response submit form!');
+    $toast.success('ข้อมูลถูกต้องและบันทึกเรียบร้อยแล้ว');
+
+    // เคลียร์ฟอร์มหลัง success
+    resetForm();
+
     return true;
   } catch (error) {
     $toast.error('เกิดข้อผิดพลาดระหว่างกดติดตาม');
@@ -144,15 +149,22 @@ async function submitForm() {
   // ส่งค่าไไป 2 parameters (end point, {}ตั้งค่า method)
 }
 
+function resetForm() {
+  form.value = {
+    projectId: [{ id: '', vueKey: genKey() }],
+    phoneNumber: '',
+  };
+}
+
 async function initLiff() {
   try {
     // 2.liff.ready
     await liff
       // Real Project
-      .init({ liffId: '2004487535-RwJYB2jX' });
+      // .init({ liffId: '2004487535-RwJYB2jX' });
 
       //  Local Host
-      // .init({ liffId: '2004487535-qxvEo2ge' });
+      .init({ liffId: '2004487535-qxvEo2ge' });
 
     if (liff.isLoggedIn()) {
       lineUser.value = await getUserProfile();
@@ -215,6 +227,70 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+#form {
+  width: 400px; /* กำหนดความกว้างของฟอร์ม */
+  padding: 20px;
+  background-color: #ece9e9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.space-y-5 > .form-control:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.label-text {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+}
+
+.input-field {
+  flex: 1;
+  padding: 10px;
+  /* แก้ไข border */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+  margin-bottom: 8px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-addproject {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #a52241;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.btn-submit {
+  width: 100%;
+}
+
+.text-center {
+  font-size: 30px;
+  font-weight: bold;
+}
+
 /* .container {
   background-color: #fff;
   border-radius: 5px;
