@@ -37,23 +37,6 @@ const validateForm = ref<any>({
 provide('form', validateForm);
 
 // FUNCTION
-function validateSpecSheet(src: any): boolean {
-  // CHECK SAMPLE STEP
-  for (const step of src.stepList.sample) {
-    if (!step.tag) {
-      return false;
-    }
-  }
-
-  // CHECK ORDER STEP
-  for (const step of src.stepList.order) {
-    if (!step.tag) {
-      return false;
-    }
-  }
-
-  return true;
-}
 async function getSpecSheet() {
   try {
     const { data } = await await useApiFetch(`/v1/spec-sheets/public/${id}`, {
@@ -127,7 +110,7 @@ onMounted(async () => {
           <IconCSS name="material-symbols:chat-error-outline-rounded" size="6rem" class="text-error"></IconCSS>
         </div>
 
-        <p class="text-center text-4xl font-bold mb-2 text-warning">เกิดปัญหาระหว่างดึงข้อมูลโปรเจกต์</p>
+        <p class="text-center text-4xl font-bold mb-2 text-warning">เกิดปัญหาระหว่างดึงข้อมูลใบสเปค</p>
         <p class="text-center text-xl">โปรดลองอีกครั้งในภายหลัง</p>
       </div>
       <VerificationModal v-else-if="!isVerified" :spec-sheet-id="id" @verified="loadSpecSheet()"></VerificationModal>
