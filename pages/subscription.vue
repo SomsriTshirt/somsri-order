@@ -1,34 +1,34 @@
 <!-- หน้าฟอร์ม -->
 <template>
-  <div v-if="!pending">
-    <div class="p-7 bg-white shadow-lg h-screen flex justify-center items-center">
+  <div v-if="!pending" class="flex justify-center items-center h-screen">
+    <div class="p-7 bg-white shadow-lg w-full max-w-lg rounded-md">
       <form id="form" class="w-full" @submit.prevent="submitForm">
-        <h1 class="text-center">ติดตามงาน</h1>
+        <h1 class="text-center text-2xl font-bold mb-5">ติดตามงาน</h1>
         <div class="space-y-5">
           <label class="form-control w-full">
             <div class="label">
-              <span class="label-text text-md">ไอดีโปรเจกต์</span>
+              <span class="label-text text-md font-bold">ไอดีโปรเจกต์</span>
             </div>
 
             <!-- ใช้ v-for วนลูป ใน array ของ form.projectId -->
-            <div v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey" class="flex gap-3 input-field">
-              <input v-model="tracking.id" type="text" placeholder="กรุณากรอกไอดีโปรเจกต์" class="input input-bordered w-full join-item" />
+            <div v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey" class="flex items-center space-x-3 border p-2 m-1 rounded-md">
+              <input v-model="tracking.id" type="text" placeholder="กรุณากรอกไอดีโปรเจกต์" class="input input-bordered w-full p-2 border-gray-300 rounded-md " />
               <!-- <p>{{ tracking }}</p> -->
-              <button class="btn join-item btn-error" type="button" @click="removeProjectId(trackingI)">ลบ</button>
+              <button class="btn join-item btn-error p-4 rounded-md  bg-red-500 text-white" type="button" @click="removeProjectId(trackingI)">ลบ</button>
             </div>
             <!-- tracking เก็บค่าของ element , trackingI เก็บค่า Index -->
-            <button type="button" class="btn-addproject text-white" @click="addProjectId(trackingI)">เพิ่ม</button>
+            <button type="button" class="btn btn-primary p-2 text-white rounded-md text-lg" @click="addProjectId(trackingI)">เพิ่ม</button>
             <!-- <button type="button" @click="form.id.push('')" class="btn">เพิ่ม</button> -->
           </label>
 
           <label class="form-control w-full">
             <div class="label">
-              <span class="label-text text-md">เบอร์โทรศัพท์</span>
+              <span class="label-text text-md font-bold">เบอร์โทรศัพท์</span>
             </div>
-            <input v-model="form.phoneNumber" type="text" placeholder="กรุณากรอกเบอร์โทรศัพท์" class="input input-bordered w-full" />
+            <input v-model="form.phoneNumber" type="text" placeholder="กรุณากรอกเบอร์โทรศัพท์" class="input input-bordered w-full p-2 border-gray-300 rounded-md " />
           </label>
 
-          <button class="btn btn-primary w-full text-lg" type="submit">ยืนยัน</button>
+          <button class="btn btn-primary w-full text-lg p-2 rounded-md  text-white" type="submit">ยืนยัน</button>
         </div>
         <div>
           <!-- <div><b>userId: </b>{{ lineUser }}</div> -->
@@ -37,6 +37,7 @@
     </div>
   </div>
 </template>
+
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
@@ -161,10 +162,10 @@ async function initLiff() {
     // 2.liff.ready
     await liff
       // Real Project
-      .init({ liffId: '2004487535-RwJYB2jX' });
+      // .init({ liffId: '2004487535-RwJYB2jX' });
 
       //  Local Host
-      // .init({ liffId: '2004487535-qxvEo2ge' });
+      .init({ liffId: '2004487535-qxvEo2ge' });
 
     if (liff.isLoggedIn()) {
       lineUser.value = await getUserProfile();
@@ -227,8 +228,8 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-#form {
-  width: 400px; /* กำหนดความกว้างของฟอร์ม */
+/* #form {
+  width: 400px; 
   padding: 20px;
   background-color: #ece9e9;
   border-radius: 8px;
@@ -258,7 +259,7 @@ onMounted(async () => {
 .input-field {
   flex: 1;
   padding: 10px;
-  /* แก้ไข border */
+ 
   border: 1px solid #ccc;
   border-radius: 4px;
   margin-right: 10px;
@@ -289,69 +290,7 @@ onMounted(async () => {
 .text-center {
   font-size: 30px;
   font-weight: bold;
-}
-
-/* .container {
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  width: 400px;
-  margin: auto;
-  margin-top: 10vh;
-}
-
-.form-control input {
-  border: 2px solid #f0f0f0;
-  border-radius: 4px;
-  display: block;
-  border-color: rgb(70, 69, 69);
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
-}
-
-.form {
-  padding: 30px 40px;
-}
-
-h2 {
-  text-align: center;
-  margin: 0 0 0 20px;
-}
-
-.form-control {
-  position: relative;
-  margin-bottom: 10px;
-  padding-bottom: 20px;
-}
-
-.form-control label {
-  color: #000000;
-  display: block;
-  margin-bottom: 5px;
-}
-
-.form button {
-  cursor: pointer;
-  background-color: #3498db;
-  color: #fff;
-  border: 2px solid #3498db;
-  margin-top: 20px;
-  width: 100%;
-  display: block;
-  font-size: 16px;
-  padding: 10px;
-}
-
-.form-control small {
-  color: red;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  visibility: hidden;
-}
-
-.form-control.error small {
-  visibility: visible;
 } */
+
+
 </style>
