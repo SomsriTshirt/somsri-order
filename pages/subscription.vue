@@ -162,10 +162,10 @@ async function initLiff() {
     // 2.liff.ready
     await liff
       // Real Project
-      // .init({ liffId: '2004487535-RwJYB2jX' });
+      .init({ liffId: '2004487535-RwJYB2jX' });
 
       //  Local Host
-      .init({ liffId: '2004487535-qxvEo2ge' });
+      // .init({ liffId: '2004487535-qxvEo2ge' });
 
     if (liff.isLoggedIn()) {
       lineUser.value = await getUserProfile();
