@@ -11,10 +11,19 @@
             </div>
 
             <!-- ใช้ v-for วนลูป ใน array ของ form.projectId -->
-            <div v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey" class="flex items-center space-x-3 border p-2 m-1 rounded-md">
-              <input v-model="tracking.id" type="text" placeholder="กรุณากรอกไอดีโปรเจกต์" class="input input-bordered w-full p-2 border-gray-300 rounded-md " />
-              <!-- <p>{{ tracking }}</p> -->
-              <button class="btn join-item btn-error p-4 rounded-md  bg-red-500 text-white" type="button" @click="removeProjectId(trackingI)">ลบ</button>
+            <div v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey" class="border border-neutral-300 p-2 m-1 rounded-md">
+              <div class="flex items-center gap-5">
+                <input
+                  v-model="tracking.id"
+                  type="text"
+                  placeholder="กรุณากรอกไอดีโปรเจกต์"
+                  class="input input-bordered w-full p-2 border-gray-300 rounded-md"
+                  :class="{ 'border-red-500': hasError(`projectId[${trackingI}].id`) }"
+                />
+                <!-- <p>{{ tracking }}</p> -->
+                <button class="btn join-item btn-error p-4 rounded-md bg-red-500 text-white" type="button" @click="removeProjectId(trackingI)">ลบ</button>
+              </div>
+              <small v-if="hasError(`projectId[${trackingI}].id`)" class="text-red-500">{{ getError(`projectId[${trackingI}].id`) }}</small>
             </div>
             <!-- tracking เก็บค่าของ element , trackingI เก็บค่า Index -->
             <button type="button" class="btn btn-primary p-2 text-white rounded-md text-lg" @click="addProjectId(trackingI)">เพิ่ม</button>
@@ -25,10 +34,18 @@
             <div class="label">
               <span class="label-text text-md font-bold">เบอร์โทรศัพท์</span>
             </div>
-            <input v-model="form.phoneNumber" type="text" placeholder="กรุณากรอกเบอร์โทรศัพท์" class="input input-bordered w-full p-2 border-gray-300 rounded-md " />
+            <input
+              v-model="form.phoneNumber"
+              type="text"
+              placeholder="กรุณากรอกเบอร์โทรศัพท์"
+              class="input input-bordered w-full p-2 border-gray-300 rounded-md"
+              :class="{ 'border-red-500': hasError('phoneNumber') }"
+            />
+            <!-- แสดงข้อผิดพลาดถ้ามีการกรอกข้อมูลไม่ครบหรือไม่ถูกต้อง -->
+            <small v-if="hasError('phoneNumber')" class="text-red-500">{{ getError('phoneNumber') }}</small>
           </label>
 
-          <button class="btn btn-primary w-full text-lg p-2 rounded-md  text-white" type="submit">ยืนยัน</button>
+          <button class="btn btn-primary w-full text-lg p-2 rounded-md text-white" type="submit">ยืนยัน</button>
         </div>
         <div>
           <!-- <div><b>userId: </b>{{ lineUser }}</div> -->
@@ -38,9 +55,7 @@
   </div>
 </template>
 
-
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { minLength, required, helpers } from '@vuelidate/validators';
 import liff from '@line/liff';
@@ -80,17 +95,17 @@ const rules = computed(() => ({
     // forEach คือการลูป array เพื่อเข้าถึงแต่ละ element ใน array
     $each: helpers.forEach({
       id: {
-        required,
+        required: helpers.withMessage('กรุณากรอกไอดีโปรเจกต์', required),
       },
     }),
   },
   phoneNumber: {
-    required,
-    minLength: minLength(10),
+    required: helpers.withMessage('กรุณากรอกเบอร์โทรศัพท์', required),
+    minLength: helpers.withMessage('กรุณากรอกให้ครบ 10 หลัก', minLength(10)),
   },
 }));
 
-const v$ = useVuelidate(rules, form);
+const v$ = useVuelidate(rules, form, { $lazy : true });
 
 // const { data: data } = await useFetch('https://dummyjson.com/products?limit=10');
 // console.log(data);
@@ -118,6 +133,9 @@ function removeProjectId(index: number) {
 // ฟังก์ชัน Validate form
 
 async function submitForm() {
+  const isValid = await v$.value.$validate();
+  if (!isValid) return;
+
   try {
     // ลองเช็คว่า error มั้ย
     const { data, error } = await useApiFetch('/v1/line-datas', {
@@ -138,6 +156,7 @@ async function submitForm() {
 
     // เคลียร์ฟอร์มหลัง success
     resetForm();
+    
 
     return true;
   } catch (error) {
@@ -155,6 +174,17 @@ function resetForm() {
     projectId: [{ id: '', vueKey: genKey() }],
     phoneNumber: '',
   };
+  v$.value.$reset()
+
+}
+
+// โครงสร้างที่กำหนดเอง แบบ key-value pairs ที่มี key เป็นชนิดของ column และ value เป็นชนิดของข้อมูลใน column นั้น ๆ
+function hasError(column: keyof WorkOrderPayload): boolean {
+  return hasValidateError<keyof WorkOrderPayload>(v$.value, column);
+}
+
+function getError(column: keyof WorkOrderPayload): string {
+  return getValidateErrorMsg<keyof WorkOrderPayload>(v$.value, column);
 }
 
 async function initLiff() {
@@ -291,6 +321,4 @@ onMounted(async () => {
   font-size: 30px;
   font-weight: bold;
 } */
-
-
 </style>
