@@ -11,24 +11,45 @@
             </div>
 
             <!-- ใช้ v-for วนลูป ใน array ของ form.projectId -->
-            <div v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey" class="flex items-center space-x-3 border p-2 m-1 rounded-md">
-              <input v-model="tracking.id" type="text" placeholder="กรุณากรอกไอดีโปรเจกต์" class="input input-bordered w-full p-2 border-gray-300 rounded-md " />
-              <!-- <p>{{ tracking }}</p> -->
-              <button class="btn join-item btn-error p-4 rounded-md  bg-red-500 text-white" type="button" @click="removeProjectId(trackingI)">ลบ</button>
+            <div class="overflow-y-auto max-h-[300px] disabled:opacity-20">
+            <div v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey" class="border border-neutral-300 p-2 m-1 rounded-md">
+              <div class="flex items-center gap-5">
+                <input
+                  v-model="tracking.id"
+                  type="text"
+                  placeholder="กรุณากรอกไอดีโปรเจกต์"
+                  class="input input-bordered w-full p-2 border-gray-300 rounded-md disabled:opacity-20"
+                  :class="{ 'border-red-500': hasError(`projectId[${trackingI}].id`) }"
+                  :disabled="isProcessing"
+                />
+                <!-- <p>{{ tracking }}</p> -->
+                <button class="btn join-item btn-error p-4 rounded-md bg-red-500 text-white disabled:opacity-20" type="button" :disabled="isProcessing" @click="removeProjectId(trackingI)" >ลบ</button>
+              </div>
+              <small v-if="hasError(`projectId[${trackingI}].id`)" class="text-red-500">{{ getError(`projectId[${trackingI}].id`) }}</small>
+            </div>
             </div>
             <!-- tracking เก็บค่าของ element , trackingI เก็บค่า Index -->
-            <button type="button" class="btn btn-primary p-2 text-white rounded-md text-lg" @click="addProjectId(trackingI)">เพิ่ม</button>
+            <button type="button" class="btn btn-primary p-2 text-white rounded-md text-lg disabled:opacity-20" :disabled="isProcessing" @click="addProjectId(trackingI)">เพิ่ม</button>
             <!-- <button type="button" @click="form.id.push('')" class="btn">เพิ่ม</button> -->
           </label>
 
           <label class="form-control w-full">
             <div class="label">
-              <span class="label-text text-md font-bold">เบอร์โทรศัพท์</span>
+              <span class="label-text text-md font-bold " >เบอร์โทรศัพท์</span>
             </div>
-            <input v-model="form.phoneNumber" type="text" placeholder="กรุณากรอกเบอร์โทรศัพท์" class="input input-bordered w-full p-2 border-gray-300 rounded-md " />
+            <input
+              v-model="form.phoneNumber"
+              type="text"
+              placeholder="กรุณากรอกเบอร์โทรศัพท์"
+              class="input input-bordered w-full p-2 border-gray-300 rounded-md disabled:opacity-20"
+              :class="{ 'border-red-500': hasError('phoneNumber') }"
+              :disabled="isProcessing"
+            />
+            <!-- แสดงข้อผิดพลาดถ้ามีการกรอกข้อมูลไม่ครบหรือไม่ถูกต้อง -->
+            <small v-if="hasError('phoneNumber')" class="text-red-500">{{ getError('phoneNumber') }}</small>
           </label>
 
-          <button class="btn btn-primary w-full text-lg p-2 rounded-md  text-white" type="submit">ยืนยัน</button>
+          <button class="btn btn-primary w-full text-lg p-2 rounded-md text-white disabled:opacity-20" :disabled="isProcessing" type="submit">ยืนยัน</button>
         </div>
         <div>
           <!-- <div><b>userId: </b>{{ lineUser }}</div> -->
@@ -42,7 +63,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
-import { minLength, required, helpers } from '@vuelidate/validators';
+import { minLength, required, helpers, maxLength } from '@vuelidate/validators';
 import liff from '@line/liff';
 
 const form = ref<Record<string, any>>({
@@ -52,6 +73,7 @@ const form = ref<Record<string, any>>({
 const pending = ref<boolean>(true);
 const lineUser = ref();
 const { $toast } = useNuxtApp();
+const isProcessing = ref<boolean>(false);
 
 // เพิ่มเอง
 // const express = required('express')
@@ -85,12 +107,13 @@ const rules = computed(() => ({
     }),
   },
   phoneNumber: {
-    required,
-    minLength: minLength(10),
+    required: helpers.withMessage('กรุณากรอกเบอร์โทรศัพท์', required),
+    minLength: helpers.withMessage('กรุณากรอกให้ครบ 10 หลัก', minLength(10)),
+    maxLength: helpers.withMessage('คุณกรอกเกิน 10 หลัก', maxLength(10)),
   },
 }));
 
-const v$ = useVuelidate(rules, form);
+const v$ = useVuelidate(rules, form, { $lazy: true });
 
 // const { data: data } = await useFetch('https://dummyjson.com/products?limit=10');
 // console.log(data);
@@ -118,6 +141,14 @@ function removeProjectId(index: number) {
 // ฟังก์ชัน Validate form
 
 async function submitForm() {
+  isProcessing.value = true;
+  const isValid = await v$.value.$validate();
+  // ถ้าข้อมูลที่ป้อนไม่ถูกต้อง
+  if (!isValid){
+    isProcessing.value = false;
+    return;
+  } 
+
   try {
     // ลองเช็คว่า error มั้ย
     const { data, error } = await useApiFetch('/v1/line-datas', {
@@ -138,12 +169,14 @@ async function submitForm() {
 
     // เคลียร์ฟอร์มหลัง success
     resetForm();
-
+    isProcessing.value = false;
     return true;
   } catch (error) {
     $toast.error('เกิดข้อผิดพลาดระหว่างกดติดตาม');
+    isProcessing.value = false;
     return false;
   }
+  
 
   // console.log(form.value);
   // useApiFetch() คำสั่งสำหรับยิง api ใช้ได้ทุก method
@@ -155,6 +188,16 @@ function resetForm() {
     projectId: [{ id: '', vueKey: genKey() }],
     phoneNumber: '',
   };
+  v$.value.$reset();
+}
+
+// โครงสร้างที่กำหนดเอง แบบ key-value pairs ที่มี key เป็นชนิดของ column และ value เป็นชนิดของข้อมูลใน column นั้น ๆ
+function hasError(column: keyof WorkOrderPayload): boolean {
+  return hasValidateError<keyof WorkOrderPayload>(v$.value, column);
+}
+
+function getError(column: keyof WorkOrderPayload): string {
+  return getValidateErrorMsg<keyof WorkOrderPayload>(v$.value, column);
 }
 
 async function initLiff() {

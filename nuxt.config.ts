@@ -73,8 +73,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      api: process.env.API_URL || 'https://old-api.somsritshirt.com',
-      // api: process.env.API_URL || 'http://localhost:3333',
+      // api: process.env.API_URL || 'https://old-api.somsritshirt.com',
+      api: process.env.API_URL || 'http://localhost:3333',
       appName: process.env.APP_NAME || 'ติดตามการผลิตสมศรีมีเสื้อ',
     },
   },
