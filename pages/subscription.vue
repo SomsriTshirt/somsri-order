@@ -59,9 +59,7 @@
   </div>
 </template>
 
-
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { minLength, required, helpers, maxLength } from '@vuelidate/validators';
 import liff from '@line/liff';
@@ -102,7 +100,7 @@ const rules = computed(() => ({
     // forEach คือการลูป array เพื่อเข้าถึงแต่ละ element ใน array
     $each: helpers.forEach({
       id: {
-        required,
+        required: helpers.withMessage('กรุณากรอกไอดีโปรเจกต์', required),
       },
     }),
   },
@@ -334,6 +332,4 @@ onMounted(async () => {
   font-size: 30px;
   font-weight: bold;
 } */
-
-
 </style>
