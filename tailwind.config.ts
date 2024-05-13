@@ -20,6 +20,14 @@ export default {
       sans: ["IBM Plex Sans Thai", "sans-serif"],
     }
   },
+  variants: {
+    extend: {
+        opacity: ['disabled'],
+        backgroundColor: ['disabled'],
+        backgroundOpacity: ['disabled'],
+        color: ['disabled'],
+    },
+},
   daisyui: {
     themes: [
       {
