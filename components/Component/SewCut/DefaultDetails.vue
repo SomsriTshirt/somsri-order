@@ -1,11 +1,11 @@
 <script setup lang="ts">
 // PROPS
 interface Props {
-  quotation: any;
+  specSheet: any;
 }
 const props = defineProps<Props>();
-const { quotation } = toRefs(props);
-const produce = ref<any>(quotation.value.produce);
+const { specSheet } = toRefs(props);
+const produce = ref<any>(specSheet.value.details);
 </script>
 <template>
   <table class="table border border-collapse border-neutral-300 dark:border-neutral-700 text-lg bg-white dark:bg-base-100 shadow">
@@ -28,11 +28,11 @@ const produce = ref<any>(quotation.value.produce);
       </tr>
       <tr>
         <td class="font-medium border dark:border-neutral-700">ลักษณะการเย็บเพิ่มเติม</td>
-        <td class="capitalize border dark:border-neutral-700">{{ produce.more_sew_style }}</td>
+        <td class="capitalize border dark:border-neutral-700">{{ produce.sewStyleNote }}</td>
       </tr>
       <tr>
         <td class="font-medium border dark:border-neutral-700">ลักษณะเสื้อเพิ่มเติม</td>
-        <td class="capitalize border dark:border-neutral-700">{{ produce.more_style }}</td>
+        <td class="capitalize border dark:border-neutral-700">{{ produce.styleNote }}</td>
       </tr>
     </tbody>
   </table>

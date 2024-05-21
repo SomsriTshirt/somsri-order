@@ -1,19 +1,26 @@
 <script setup lang="ts">
 // PROPS
 interface Props {
+  specSheet: any;
   stepList: any[];
-  stepData: any;
 }
 const props = defineProps<Props>();
-const { stepList, stepData } = toRefs(props);
+const { stepList ,specSheet } = toRefs(props);
 
 // FUNCTION
-function isFinishedStep(stepId: string): boolean {
-  const step = stepData.value[stepId];
-  return step && step.done;
-}
-function isShowName(stepId: string): boolean {
-  return stepId === 'approved_spec' || stepId === 'approved_sample';
+function isFinishedStep(step: string): boolean {
+  const stId = ref<any>({});
+  for (const steps of specSheet.value.workOrders[0].stepList) {
+      if (!specSheet.value.workOrders[0].stepData[steps.id].done) {
+        stId.value = `${steps.id}`
+        break
+      }
+  }
+  if (specSheet.value.workOrders[0].stepData[step].done || step===stId.value) {
+    return true;
+  }else{
+    return false;
+  }
 }
 </script>
 <template>
@@ -21,16 +28,10 @@ function isShowName(stepId: string): boolean {
     <div class="modal-box">
       <h3 class="font-bold text-xl mb-3">รายละเอียดการผลิต</h3>
       <ul class="steps steps-vertical">
-        <template v-for="(step, step_i) in stepList" :key="useGenVueKey(step_i)">
-          <li v-if="step.enable" class="step" :class="{ 'step-primary': isFinishedStep(step.id) }">
+        <template v-for="(step) in stepList" :key="useGenVueKey(step.id)">
+          <li class="step" :class="{ 'step-primary': isFinishedStep(step.id) }">
             <div class="text-left">
-              <p class="font-bold">{{ step.name }}</p>
-              <template v-if="isFinishedStep(step.id)">
-                <p>
-                  เมื่อ: <span class="underline">{{ formatDate(stepData[step.id].at) }}</span> เวลา: <span class="underline">{{ formatTime(stepData[step.id].at) }} น.</span>
-                </p>
-                <p v-if="isShowName(step.id)">โดย {{ stepData[step.id].by }}</p>
-              </template>
+              <p class="font-bold">{{ step.label }}</p>
             </div>
           </li>
         </template>
