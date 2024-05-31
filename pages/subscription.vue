@@ -1,24 +1,24 @@
 <!-- หน้าฟอร์ม -->
 <template>
   <div v-if="!pending" class="flex justify-center items-center h-screen">
-    <div class="p-7 bg-white shadow-lg w-full max-w-lg rounded-md">
+    <div class="p-7 bg-white dark:bg-black shadow-lg w-full max-w-lg rounded-md">
       <form id="form" class="w-full" @submit.prevent="submitForm">
-        <h1 class="text-center text-2xl font-bold mb-5">ติดตามงาน</h1>
+        <h1 class="text-center text-2xl font-bold mb-5 dark:text-white">ติดตามงาน</h1>
         <div class="space-y-5">
           <label class="form-control w-full">
             <div class="label">
-              <span class="label-text text-md font-bold">ไอดีโปรเจกต์</span>
+              <span class="label-text text-md font-bold dark:text-white">ไอดีโปรเจกต์</span>
             </div>
 
             <!-- ใช้ v-for วนลูป ใน array ของ form.projectId -->
             <div class="overflow-y-auto max-h-[300px] disabled:opacity-20">
-            <div v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey" class="border border-neutral-300 p-2 m-1 rounded-md">
+            <div v-for="(tracking, trackingI) in form.projectId" :key="tracking.vueKey" class="border border-neutral-300 dark:border-neutral-600 p-2 m-1 rounded-md">
               <div class="flex items-center gap-5">
                 <input
                   v-model="tracking.id"
                   type="text"
                   placeholder="กรุณากรอกไอดีโปรเจกต์"
-                  class="input input-bordered w-full p-2 border-gray-300 rounded-md disabled:opacity-20"
+                  class="input input-bordered w-full p-2  rounded-md disabled:opacity-20"
                   :class="{ 'border-red-500': hasError(`projectId[${trackingI}].id`) }"
                   :disabled="isProcessing"
                 />
@@ -29,19 +29,19 @@
             </div>
             </div>
             <!-- tracking เก็บค่าของ element , trackingI เก็บค่า Index -->
-            <button type="button" class="btn btn-primary p-2 text-white rounded-md text-lg disabled:opacity-20" :disabled="isProcessing" @click="addProjectId(trackingI)">เพิ่ม</button>
+            <button type="button" class="btn btn-primary p-2 text-white dark: rounded-md text-lg disabled:opacity-20" :disabled="isProcessing" @click="addProjectId(trackingI)">เพิ่ม</button>
             <!-- <button type="button" @click="form.id.push('')" class="btn">เพิ่ม</button> -->
           </label>
 
           <label class="form-control w-full">
             <div class="label">
-              <span class="label-text text-md font-bold " >เบอร์โทรศัพท์</span>
-            </div>
+              <span class="label-text text-md font-bold dark:text-white" >เบอร์โทรศัพท์</span>
+            </div >
             <input
               v-model="form.phoneNumber"
               type="text"
               placeholder="กรุณากรอกเบอร์โทรศัพท์"
-              class="input input-bordered w-full p-2 border-gray-300 rounded-md disabled:opacity-20"
+              class="input input-bordered w-full p-2 border-gray-300 dark:dark:border-neutral-600 rounded-md disabled:opacity-20"
               :class="{ 'border-red-500': hasError('phoneNumber') }"
               :disabled="isProcessing"
             />
@@ -123,7 +123,7 @@ function genKey() {
 
 // ฟังก์ชันเพิ่ม ค่า id และ ค่า vuekey ให้ในตัวแปร form
 function addProjectId() {
-  console.log(form.value.id);
+  // console.log(form.value.id);
   // console.log(count);
   form.value.projectId.push({ id: '', vueKey: genKey() });
 }
@@ -269,67 +269,4 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* #form {
-  width: 400px; 
-  padding: 20px;
-  background-color: #ece9e9;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.text-center {
-  text-align: center;
-}
-
-.space-y-5 > .form-control:not(:last-child) {
-  margin-bottom: 20px;
-}
-
-.label-text {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 8px;
-  display: block;
-}
-
-.input-group {
-  display: flex;
-  align-items: center;
-}
-
-.input-field {
-  flex: 1;
-  padding: 10px;
- 
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-right: 10px;
-  margin-bottom: 8px;
-}
-
-.btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.btn-addproject {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: #a52241;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.btn-submit {
-  width: 100%;
-}
-
-.text-center {
-  font-size: 30px;
-  font-weight: bold;
-} */
 </style>
