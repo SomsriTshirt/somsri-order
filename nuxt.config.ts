@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: false,
+
   app: {
     head: {
       htmlAttrs: {
@@ -46,9 +47,11 @@ export default defineNuxtConfig({
       ],
     },
   },
+
   build: {
     transpile: ['vue-sonner'],
   },
+
   bugsnag: {
     publishRelease: true,
     config: {
@@ -57,13 +60,17 @@ export default defineNuxtConfig({
       enabledReleaseStages: ['staging', 'production'],
     },
   },
+
   devtools: {
     enabled: true, // or false to disable
   },
-  modules: ['@nuxtjs/eslint-module', '@nuxtjs/tailwindcss', '@nuxtjs/google-fonts', 'nuxt-icon', '@nuxtjs/color-mode', 'nuxt-bugsnag'],
+
+  modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss', '@nuxtjs/google-fonts', 'nuxt-icon', '@nuxtjs/color-mode', 'nuxt-bugsnag'],
+
   colorMode: {
     classSuffix: '',
   },
+
   googleFonts: {
     families: {
       'IBM+Plex+Sans+Thai': [300, 400, 500, 700],
@@ -71,6 +78,7 @@ export default defineNuxtConfig({
     display: 'swap',
     preload: true,
   },
+
   runtimeConfig: {
     public: {
       // api: process.env.API_URL || 'http://localhost:3333',
@@ -78,4 +86,6 @@ export default defineNuxtConfig({
       appName: process.env.APP_NAME || 'ติดตามการผลิตสมศรีมีเสื้อ',
     },
   },
+
+  compatibilityDate: '2024-07-10',
 });
