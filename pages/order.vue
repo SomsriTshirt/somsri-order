@@ -24,7 +24,7 @@ const isLoading = ref<boolean>(true);
 const isVerified = ref<boolean>(false);
 const specSheet = ref<any>({});
 const hasError = ref<boolean>(false);
-const { $toast }: any = useNuxtApp();
+const { $toast } = useNuxtApp();
 const validateForm = ref<any>({
   sewCut: false,
   delivery: false,
@@ -83,18 +83,9 @@ async function loadSpecSheet() {
 }
 
 // COMPUTED
-const isApprovedSpec = computed(() => {
-  const customerApproved = ref<any>(specSheet.value.stepData.customerApproved.done);
-  if (customerApproved.value === true) {
-    return true;
-  } else {
-    return false;
-  }
-});
+const isApprovedSpec = computed<boolean>(() => !!specSheet.value.stepData.customerApproved.done);
 
 onMounted(async () => {
-  await nextTick();
-  // CHECK ID
   if (!id) {
     hasError.value = true;
   } else {

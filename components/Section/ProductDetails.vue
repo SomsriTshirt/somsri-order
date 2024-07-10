@@ -14,7 +14,7 @@ const props = defineProps<Props>();
 
 // VARIABLE
 const { specSheet, isApproved } = toRefs(props);
-const { $api }: any = useNuxtApp();
+const { $api, $imageUrl } = useNuxtApp();
 const form: any = inject('form');
 
 // COMPUTED
@@ -29,7 +29,7 @@ const havePrintWork = computed(() => specSheet.value.printPoints.length > 0);
       <div class="rounded-2xl">
         <swiper-container v-once class="bg-white dark:bg-neutral-800 rounded-2xl h-[36rem] mb-5 shadow" navigation="true" pagination="true" loop="true" centered-slides="true">
           <swiper-slide v-for="(img, img_i) in specSheet.img" :key="useGenVueKey(img_i)" class="flex rounded-2xl justify-center">
-            <img class="rounded-2xl object-contain" :src="imageUrl(img.url)" />
+            <img class="rounded-2xl object-contain" :src="$imageUrl(img.url)" />
           </swiper-slide>
         </swiper-container>
       </div>
@@ -58,7 +58,7 @@ const havePrintWork = computed(() => specSheet.value.printPoints.length > 0);
             <td class="w-1/2 p-3 border dark:border-neutral-700">
               <swiper-container class="bg-neutral-800 rounded-2xl w-full" navigation="true" pagination="true" loop="true" centered-slides="true">
                 <swiper-slide v-for="(img, img_i) in group.img" :key="useGenVueKey(img_i)" class="flex justify-center rounded-2xl">
-                  <img class="rounded-2xl object-contain" :src="imageUrl(img.url)" />
+                  <img class="rounded-2xl object-contain" :src="$imageUrl(img.url)" />
                 </swiper-slide>
               </swiper-container>
             </td>
