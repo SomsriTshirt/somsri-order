@@ -41,7 +41,7 @@ async function getSpecSheet() {
   try {
     const { data } = await await useApiFetch(`/v1/spec-sheets/public/${id}`, {
       query: {
-        include: 'project,project.customer,workOrders',
+        include: 'project,project.customer,project.delivery,workOrders',
       },
     });
 
