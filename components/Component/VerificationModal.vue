@@ -69,6 +69,7 @@ async function verify() {
       emit('verified');
       return true;
     } else {
+      isPending.value = false;
       return false;
     }
   } catch (err) {
