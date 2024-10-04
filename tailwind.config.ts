@@ -2,13 +2,16 @@ import type { Config } from 'tailwindcss';
 import animate from 'tailwindcss-animate';
 
 export default {
-    darkMode: 'class',
+    darkMode: ['class'],
     content: [
         `./components/**/*.{vue,js,ts}`,
+        `./components/**/*.{vue,js,ts}`,
+        `./Functions/**/*.{js,ts}`,
         `./layouts/**/*.vue`,
         `./pages/**/*.vue`,
         `./composables/**/*.{js,ts}`,
         `./plugins/**/*.{js,ts}`,
+        `./presets/**/*.{js,ts}`,
         `./utils/**/*.{js,ts}`,
         `./App.{js,ts,vue}`,
         `./app.{js,ts,vue}`,
@@ -28,6 +31,36 @@ export default {
             },
         },
         extend: {
+            colors: {
+                primary: {
+                    '50': '#fef2f3',
+                    '100': '#fce7e8',
+                    '200': '#f9d2d7',
+                    '300': '#f4adb5',
+                    '400': '#ed7f8e',
+                    '500': '#e25169',
+                    '600': '#cd3152',
+                    '700': '#a52241',
+                    '800': '#91203e',
+                    '900': '#7c1f3b',
+                    '950': '#450c1c',
+                    default: '#a52241',
+                    dark: {
+                        50: '#fcf7fa',
+                        100: '#faf2f6',
+                        200: '#f5dfe8',
+                        300: '#edccd8',
+                        400: '#e0abb5',
+                        500: '#d48a8f',
+                        600: '#bf7176',
+                        700: '#9e4d52',
+                        800: '#803236',
+                        900: '#5e1b1f',
+                        950: '#3d0c0e',
+                        default: '#d48a8f',
+                    },
+                },
+            },
             keyframes: {
                 'accordion-down': {
                     from: { height: '0' },
