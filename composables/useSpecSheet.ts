@@ -21,7 +21,28 @@ export function useSpecSheet() {
         }
     }
 
+    async function verifyCustomer(id: string, pin: string[], options: ApiOptions = {}): Promise<{ verify: boolean }> {
+        try {
+            const { data, error } = await useApiFetch<{ verify: boolean }>(`${BASE_URL}/public/${id}`, {
+                method: 'POST',
+                body: {
+                    verifyPin: pin.join(''),
+                },
+            });
+
+            if (error.value) throw error.value;
+            if (!data.value) throw new Error('NO RESPONSE');
+
+            return data.value;
+        } catch (err) {
+            useBugsnag().notify(JSON.stringify(err));
+            if (options.errorCallback) options.errorCallback();
+            return { verify: false };
+        }
+    }
+
     return {
         get,
+        verifyCustomer,
     };
 }
