@@ -65,7 +65,7 @@ export default defineNuxtConfig({
     enabled: true, // or false to disable
   },
 
-  modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss', '@nuxtjs/google-fonts', 'nuxt-icon', '@nuxtjs/color-mode', 'nuxt-bugsnag'],
+  modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss', '@nuxtjs/google-fonts', 'nuxt-icon', '@nuxtjs/color-mode', 'nuxt-bugsnag', 'shadcn-nuxt'],
 
   colorMode: {
     classSuffix: '',
@@ -77,6 +77,10 @@ export default defineNuxtConfig({
     },
     display: 'swap',
     preload: true,
+  },
+
+  shadcn: {
+    componentDir: './components/ui',
   },
 
   runtimeConfig: {
