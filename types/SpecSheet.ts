@@ -98,7 +98,7 @@ export interface SpecSheet {
     sampleType: string;
     sampleConfirmedType: string;
     sampleConfirmedTime: string;
-    sampleDue: Date | string;
+    sampleDue: string;
     packing: string;
     isActive: boolean;
     currentStep: string;
@@ -107,7 +107,7 @@ export interface SpecSheet {
     stepData: Record<Status, StatusData>;
     isFinish: boolean;
     isVoid: boolean;
-    finishAt: string | Date | null;
+    finishAt: string | null;
     createdAt: string;
     updatedAt: string;
 }
