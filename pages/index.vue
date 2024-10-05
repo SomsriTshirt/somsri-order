@@ -49,7 +49,7 @@ async function findSpecsheet() {
             <form @submit.prevent="findSpecsheet()">
                 <div class="grid grid-cols-12 gap-5">
                     <div class="col-span-12 sm:col-span-9 lg:col-span-10 h-full">
-                        <Input v-model="searchId" type="text" class="w-full h-full" :class="{ 'border-red-500': error }" placeholder="เลขที่ใบสเปค" :disabled="pending" />
+                        <Input v-model="searchId" type="text" class="w-full h-full" :class="{ '!border-red-500': error }" placeholder="เลขที่ใบสเปค" :disabled="pending" />
                         <p v-if="error" class="text-error mt-2">{{ error }}</p>
                     </div>
                     <Button class="col-span-12 sm:col-span-3 lg:col-span-2 text-lg h-full" :disabled="pending">
