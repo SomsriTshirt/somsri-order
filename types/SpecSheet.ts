@@ -1,5 +1,6 @@
 import type { StatusData, StatusList } from './Global.ts';
 import type { Project } from './Project';
+import type { WorkOrder } from './WorkOrder.js';
 
 export type SpecSheetType = 'ORDER' | 'SAMPLE' | 'CLAIM';
 
@@ -110,4 +111,5 @@ export interface SpecSheet {
     finishAt: string | null;
     createdAt: string;
     updatedAt: string;
+    workOrders: WorkOrder[];
 }
