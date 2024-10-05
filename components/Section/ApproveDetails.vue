@@ -2,15 +2,26 @@
 import { useVuelidate } from '@vuelidate/core';
 import { required, requiredIf, helpers } from '@vuelidate/validators';
 import type { SpecSheet } from '~/types/SpecSheet';
+
+// LAZY LOAD
+const ApprovedSpecModal = defineAsyncComponent(() => import('@/components/Component/ApprovedSpecModal.vue'));
+
 // PROPS
 interface Props {
     specSheet: SpecSheet;
 }
 
+// EMIT
+type Emit = {
+    approve: [];
+};
+defineEmits<Emit>();
+
 // VARIABLE
 const props = defineProps<Props>();
 const { specSheet } = toRefs(props);
 const { $toast }: any = useNuxtApp();
+const approveSpecModalOpenState = ref<boolean>(false);
 const form: any = inject('form');
 
 // VALIDATOR
@@ -61,7 +72,7 @@ async function openApproveModal() {
         return;
     }
 
-    openModal('approved-spec-modal');
+    approveSpecModalOpenState.value = true;
 }
 </script>
 <template>
@@ -75,5 +86,9 @@ async function openApproveModal() {
             <Checkbox id="approver-name" v-model:checked="form.specSheet" class="w-5 h-5" />
             <Label for="approver-name" class="required underline text-md">ฉันได้ทำการตรวจสอบมั่นใจแล้วว่าใบสเปคนี้ถูกต้อง</Label>
         </div>
+
+        <Suspense v-if="approveSpecModalOpenState">
+            <ApprovedSpecModal :id="specSheet.id" v-model:open="approveSpecModalOpenState" @approved="$emit('approve')" />
+        </Suspense>
     </div>
 </template>
