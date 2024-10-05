@@ -41,8 +41,27 @@ export function useSpecSheet() {
         }
     }
 
+    async function confrim(id: string, body: { by: string }, options: ApiOptions = {}): Promise<SpecSheet | null> {
+        try {
+            const { data, error } = await useApiFetch<SpecSheet>(`${BASE_URL}/public/${id}/approved/customer`, {
+                method: 'POST',
+                body: body,
+            });
+
+            if (error.value) throw error.value;
+            if (!data.value) throw new Error('NO RESPONSE');
+
+            return data.value;
+        } catch (err) {
+            useBugsnag().notify(JSON.stringify(err));
+            if (options.errorCallback) options.errorCallback();
+            return null;
+        }
+    }
+
     return {
         get,
         verifyCustomer,
+        confrim,
     };
 }
