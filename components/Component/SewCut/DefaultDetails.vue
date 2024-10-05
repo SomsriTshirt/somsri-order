@@ -1,39 +1,56 @@
 <script setup lang="ts">
+import { TableBody, Table, TableCell, TableRow } from '~/components/ui/table';
+import type { SpecSheet } from '~/types/SpecSheet';
+
+// INTERFACE
+interface DetailsRow {
+    label: string;
+    value: any;
+}
+
 // PROPS
 interface Props {
-  specSheet: any;
+    specSheet: SpecSheet;
 }
 const props = defineProps<Props>();
 const { specSheet } = toRefs(props);
-const produce = ref<any>(specSheet.value.details);
+
+// VARIABLE
+const produce = ref<Record<string, any>>(specSheet.value.details);
+const detailLists: DetailsRow[] = [
+    {
+        label: 'เนื้อผ้า',
+        value: produce.value.fabric,
+    },
+    {
+        label: 'สีเสื้อ',
+        value: produce.value.color,
+    },
+    {
+        label: 'แขนเสื้อ',
+        value: produce.value.sleeve,
+    },
+    {
+        label: 'ปกเสื้อ',
+        value: produce.value.collar,
+    },
+    {
+        label: 'ลักษณะการเย็บเพิ่มเติม',
+        value: produce.value.sewStyleNote,
+    },
+    {
+        label: 'ลักษณะเสื้อเพิ่มเติม',
+        value: produce.value.styleNote,
+    },
+];
 </script>
 <template>
-  <table class="table border border-collapse border-neutral-300 dark:border-neutral-700 text-lg bg-white dark:bg-base-100 shadow">
-    <tbody>
-      <tr>
-        <td class="font-medium border dark:border-neutral-700">เนื้อผ้า</td>
-        <td class="capitalize border dark:border-neutral-700">{{ produce.fabric }}</td>
-      </tr>
-      <tr>
-        <td class="font-medium border dark:border-neutral-700">สีเสื้อ</td>
-        <td class="capitalize border dark:border-neutral-700">{{ produce.color }}</td>
-      </tr>
-      <tr>
-        <td class="font-medium border dark:border-neutral-700">แขนเสื้อ</td>
-        <td class="capitalize border dark:border-neutral-700">{{ produce.sleeve }}</td>
-      </tr>
-      <tr>
-        <td class="font-medium border dark:border-neutral-700">ปกเสื้อ</td>
-        <td class="capitalize border dark:border-neutral-700">{{ produce.collar }}</td>
-      </tr>
-      <tr>
-        <td class="font-medium border dark:border-neutral-700">ลักษณะการเย็บเพิ่มเติม</td>
-        <td class="capitalize border dark:border-neutral-700">{{ produce.sewStyleNote }}</td>
-      </tr>
-      <tr>
-        <td class="font-medium border dark:border-neutral-700">ลักษณะเสื้อเพิ่มเติม</td>
-        <td class="capitalize border dark:border-neutral-700">{{ produce.styleNote }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <Table>
+        <TableBody class="bg-stone-100 dark:bg-stone-800">
+            <TableRow v-for="detail in detailLists" :key="detail.label" class="text-lg dark:text-white">
+                <TableCell class="font-medium">{{ detail.label }}</TableCell>
+                <TableCell>{{ detail.value || '-' }}</TableCell>
+            </TableRow>
+        </TableBody>
+    </Table>
 </template>
