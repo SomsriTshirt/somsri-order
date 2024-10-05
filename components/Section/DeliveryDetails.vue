@@ -16,7 +16,7 @@ const project = ref<Project>(specSheet.value.project as Project);
 const form: any = inject('form');
 
 // FUNCTION
-function parsePhoneNumber(phoneNumber: string) {
+function parsePhoneNumber(phoneNumber: string | null | undefined) {
     if (!phoneNumber) {
         return phoneNumber;
     }
@@ -40,7 +40,7 @@ const isRecieveByMyself = computed(() => project.value.deliveryData.deliveryMeth
 </script>
 <template>
     <div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-5 mb-5 text-stone-600 dark:text-stone-300">
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-5 mb-5 dark:text-stone-300">
             <div class="col-span-2 grid grid-cols-2 gap-5">
                 <div v-if="hasSample">
                     <p class="font-bold text-xl text-primary-700 dark:text-primary-400 mb-3">จัดส่งตัวอย่างที่</p>
