@@ -59,9 +59,25 @@ export function useSpecSheet() {
         }
     }
 
+    async function isExist(id: string, options: ApiOptions = {}): Promise<{ status: boolean } | null> {
+        try {
+            const { data, error } = await useApiFetch<{ status: boolean }>(`${BASE_URL}/public/status/${id}`);
+
+            if (error.value) throw error.value;
+            if (!data.value) throw new Error('NO RESPONSE');
+
+            return data.value;
+        } catch (err) {
+            useBugsnag().notify(JSON.stringify(err));
+            if (options.errorCallback) options.errorCallback();
+            return null;
+        }
+    }
+
     return {
         get,
         verifyCustomer,
         confrim,
+        isExist,
     };
 }
