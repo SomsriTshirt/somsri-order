@@ -20,7 +20,7 @@ defineEmits<Emit>();
 // VARIABLE
 const props = defineProps<Props>();
 const { specSheet } = toRefs(props);
-const { $toast }: any = useNuxtApp();
+const { $toast } = useNuxtApp();
 const approveSpecModalOpenState = ref<boolean>(false);
 const form: any = inject('form');
 
