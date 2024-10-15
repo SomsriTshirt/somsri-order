@@ -53,16 +53,9 @@ async function getSpecSheet(): Promise<SpecSheet | null> {
     return data;
 }
 
-async function prepareOrder() {
-    const status = await getSpecSheet();
-    if (!status) {
-        return '';
-    }
-}
-
 async function reloadSpecSheet() {
     isLoading.value = true;
-    await prepareOrder();
+    specSheet.value = (await getSpecSheet()) as SpecSheet;
     isLoading.value = false;
 }
 
