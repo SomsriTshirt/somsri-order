@@ -79,13 +79,17 @@ async function openApproveModal() {
     <div class="rounded-xl border dark:border-stone-600 p-5 bg-white dark:bg-stone-800 shadow">
         <Label class="required text-lg" for="input-approved-name">ลงชื่อผู้อนุมัติใบสเปค </Label>
         <div class="grid grid-cols-12 gap-5 mt-1 mb-2">
-            <Input id="input-approved-name" v-model="form.by" class="input input-bordered col-span-10" type="text" placeholder="--ชื่อผู้อนุมัติใบสเปค--" />
-            <Button class="text-lg col-span-2" @click="openApproveModal()"><IconCSS name="material-symbols:check-small-rounded" size="2rem" class="mr-1"></IconCSS>อนุมัติใบสเปค</Button>
+            <div class="col-span-12 sm:col-span-10">
+                <Input id="input-approved-name" v-model="form.by" class="input input-bordered" type="text" placeholder="--ชื่อผู้อนุมัติใบสเปค--" />
+                <div class="flex items-center gap-1">
+                    <Checkbox id="approver-name" v-model:checked="form.specSheet" class="w-5 h-5" />
+                    <Label for="approver-name" class="required underline text-md">ฉันได้ทำการตรวจสอบมั่นใจแล้วว่าใบสเปคนี้ถูกต้อง</Label>
+                </div>
+            </div>
         </div>
-        <div class="flex items-center gap-1">
-            <Checkbox id="approver-name" v-model:checked="form.specSheet" class="w-5 h-5" />
-            <Label for="approver-name" class="required underline text-md">ฉันได้ทำการตรวจสอบมั่นใจแล้วว่าใบสเปคนี้ถูกต้อง</Label>
-        </div>
+        <Button class="text-lg w-full col-span-12 sm:col-span-2" @click="openApproveModal()"
+            ><IconCSS name="material-symbols:check-small-rounded" size="2rem" class="mr-1"></IconCSS>อนุมัติใบสเปค</Button
+        >
 
         <Suspense v-if="approveSpecModalOpenState">
             <ApprovedSpecModal :id="specSheet.id" v-model:open="approveSpecModalOpenState" @approved="$emit('approve')" />

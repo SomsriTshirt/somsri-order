@@ -43,16 +43,16 @@ async function approvedSpec() {
 // ข้อมูลที่ดึงได้จะเป็น JSON ซึ่งใน js ไม่่สามารถใช้ได้ ต้องแปลงให้เป็น js object ก่อน
 </script>
 <template>
-    <AlertDialog v-model:open="open">
-        <AlertDialogContent class="max-w-5xl">
-            <AlertDialogHeader class="flex-row justify-between items-center gap-3">
-                <AlertDialogTitle>เงื่อนไขการแก้ไขตัวอย่าง</AlertDialogTitle>
-                <AlertDialogCancel :disabled="pending" as-child>
+    <Dialog v-model:open="open">
+        <DialogScrollContent class="max-w-5xl">
+            <DialogHeader class="flex-row justify-between items-center gap-3">
+                <DialogTitle>เงื่อนไขการแก้ไขตัวอย่าง</DialogTitle>
+                <DialogClose :disabled="pending" as-child>
                     <Button :disabled="pending" type="button" class="px-2" variant="ghost">
                         <IconCSS name="material-symbols:close-rounded" size="1rem"></IconCSS>
                     </Button>
-                </AlertDialogCancel>
-            </AlertDialogHeader>
+                </DialogClose>
+            </DialogHeader>
 
             <div class="dark:text-stone-300 border border-stone-400 dark:border-stone-600 rounded-xl shadow p-4 mb-3">
                 <ol class="my-2 list-decimal list-inside">
@@ -88,10 +88,12 @@ async function approvedSpec() {
                 </div>
             </div>
 
-            <AlertDialogFooter>
-                <AlertDialogCancel :disabled="pending" type="button">ยกเลิก</AlertDialogCancel>
+            <DialogFooter class="gap-3">
+                <DialogClose as-child>
+                    <Button variant="outline" :disabled="pending" type="button">ยกเลิก</Button>
+                </DialogClose>
                 <Button :disabled="pending" type="button" @click="approvedSpec()">ฉันอ่านและยอมรับเงื่อนไขข้างต้น</Button>
-            </AlertDialogFooter>
-        </AlertDialogContent>
-    </AlertDialog>
+            </DialogFooter>
+        </DialogScrollContent>
+    </Dialog>
 </template>

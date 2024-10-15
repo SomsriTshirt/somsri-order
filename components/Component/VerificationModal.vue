@@ -80,7 +80,7 @@ async function verify() {
             </AlertDialogHeader>
 
             <div class="flex flex-col items-center gap-y-3">
-                <PinInput v-model="pins" placeholder="○" @complete="verify">
+                <PinInput v-model="pins" type="number" placeholder="○" @complete="verify">
                     <PinInputGroup>
                         <PinInputInput v-for="(num, index) in 4" :key="num" :class="{ '!border-red-500': errorMsg }" class="text-lg w-12 h-12" :disabled="isPending" :index="index" />
                     </PinInputGroup>
