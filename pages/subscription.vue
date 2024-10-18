@@ -53,14 +53,14 @@ async function submitForm() {
 
     try {
         // ลองเช็คว่า error มั้ย
-        const { data, error } = await useApiFetch('/v1/line-datas', {
+        const { data, error } = await useApiFetch('/v1/progress-subscriptions/create', {
             method: 'POST',
             // ... แตกข้อมูล key จากตัวแปรนั้นๆออกมา form.value มี 2 ตัวคือ projectId , phoneNumber
             body: {
                 ...form.value,
                 lineUserId: lineUser.value.userId,
                 //
-                projectId: form.value.projectId.map((project: Record<string, any>) => project.id),
+                projectIds: form.value.projectId.map((project: Record<string, any>) => project.id),
             },
         });
 
