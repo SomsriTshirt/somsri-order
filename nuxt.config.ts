@@ -88,7 +88,7 @@ export default defineNuxtConfig({
             // api: process.env.API_URL || 'http://localhost:3333',
             api: process.env.API_URL || 'https://api.somsritshirt.com',
             appName: process.env.APP_NAME || 'ติดตามการผลิตสมศรีมีเสื้อ',
-            liffId: process.env.LINE_LIFF_ID || '2004487535-RwJYB2jX',
+            liffId: process.env.LINE_LIFF_ID || '2006479559-wEABNJLB',
         },
     },
 
