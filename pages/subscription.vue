@@ -74,7 +74,6 @@ async function submitForm() {
         isProcessing.value = false;
         return true;
     } catch (error) {
-        alert(error);
         $toast.error('เกิดข้อผิดพลาดระหว่างกดติดตาม');
         useBugsnag().notify(JSON.stringify(error));
         isProcessing.value = false;
