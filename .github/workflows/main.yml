@@ -30,7 +30,7 @@ jobs:
             command: c
             cwd: "./"
             files: |
-              /.output/public/
+              ./.output/public/
             outPath: deploy.tar
 
         - name: 🗿 DEPLOY BUILD TO SERVER
