@@ -4,24 +4,38 @@ on:
       - main
 
 jobs:
-    deploy_job:
+    build-and-deploy:
       runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          node-version: [23.x]
+          
       name: 🌈 DEPLOY NUXT 3 TO OUR SERVER
       steps:
         # To use this repository's private action, you must check out the repository
         - name: 🛒 CHECKOUT
-          uses: actions/checkout@v2
+          uses: actions/checkout@v4
+
+        - name: SET NODE VERSION
+          uses: actions/setup-node@v3
+          with:
+            node-version: ${{ matrix.node-version }}
 
         - name: 🛠️ BUILD OUR APP
-          run: npm install && npm run generate
+          run: yarn install && yarn run generate
+
+        - name: PACK BUILD FILE
+          uses: a7ul/tar-action@v1.1.0
+          with:
+            command: c
+            cwd: "./"
+            files: |
+              /.output/public/
+            outPath: deploy.tar
 
         - name: 🗿 DEPLOY BUILD TO SERVER
-          uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+          uses: caprover/deploy-from-github@v1.0.1
           with:
-            username: ${{ secrets.USERNAME }}
-            server: '${{ secrets.IP }}'
-            password: ${{ secrets.PASSWORD }}
-            sftp_only: true
-            local_path: './.output/public/*'
-            remote_path: './domains/order.somsritshirt.com/public_html'
-            sftpArgs: '-o ConnectTimeout=5'
+            server: '${{ secrets.CAPROVER_SERVER }}'
+            app: '${{ secrets.APP_NAME }}'
+            token: '${{ secrets.APP_TOKEN }}'
